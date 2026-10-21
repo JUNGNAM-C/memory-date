@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
+<defs><linearGradient id="g" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="95"><stop offset="0" stop-color="#E5501B"/><stop offset="1" stop-color="#FFB340"/></linearGradient></defs>
+<rect width="100" height="100" fill="#FFC45E"/>
+<rect width="100" height="100" fill="#F8861F" opacity=".0"/>
+<g fill="url(#g)"><rect x="0" y="1.49" width="100" height="8.51"/><rect x="0" y="17.24" width="100" height="7.28"/><rect x="0" y="30.69" width="100" height="6.22"/><rect x="0" y="42.20" width="100" height="5.32"/><rect x="0" y="52.05" width="100" height="4.54"/><rect x="0" y="60.47" width="100" height="3.89"/><rect x="0" y="67.65" width="100" height="3.32"/><rect x="0" y="73.81" width="100" height="2.84"/><rect x="0" y="79.06" width="100" height="2.43"/><rect x="0" y="83.56" width="100" height="2.08"/><rect x="0" y="87.40" width="100" height="1.77"/><rect x="0" y="90.69" width="100" height="1.52"/><rect x="0" y="93.49" width="100" height="1.30"/></g>
+<circle cx="50" cy="46" r="27" fill="#FFC233"/>
+<path d="M0 100V70C6 68 14 67 22 68C25 58 40 54 52 61C58 54 72 52 80 60C88 56 97 58 100 66V100Z" fill="#FFFBF8"/>
+</svg>
