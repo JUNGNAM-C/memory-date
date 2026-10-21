@@ -1,0 +1,927 @@
+<title>기억의 날짜</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: 1993년식 벽걸이 달력. 금속 걸이 띠와 파란 연도 띠, 주황 햇살과 구름 표지가 위에 오고 그 아래로 큰 날짜 격자와 파란 라벨 박스가 이어지는 단일 열 */
+:root{
+  --bg:#F1E4DC;
+  --paper:#FFFBF8;
+  --peach:#FCE8DF;
+  --ink:#1B2A63;
+  --ink2:#5B6486;
+  --line:#E6D3CA;
+  --bar:#1B2A63;
+  --sun:#D8470F;
+  --on-sun:#FFFFFF;
+  --blue:#1163B3;
+  --on-blue:#FFFFFF;
+  --brand:#1279BE;
+  --on-brand:#FFFFFF;
+  --banner:#1B9BDB;
+  --maroon:#9E1F3A;
+  --metal:#8F9CA6;
+  --metal2:#BAC4CB;
+  --ray:#F5793A;
+  --ray2:#FCE0D2;
+  --sky1:#E5501B;--sky2:#F8861F;--sky3:#FFB340;--cloudc:#FFC45E;--sunc:#FFC233;
+  --sea:#1A88C9;
+  --tint:#FDEBE2;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --gungseo:"Gungsuh","궁서","궁서체","GungsuhChe","GungSeo","Noto Serif KR","Batang",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1424;--paper:#151E36;--peach:#251F36;--ink:#E8EEFF;--ink2:#A2AED0;--line:#2A3558;--bar:#05080F;
+    --sun:#FF8A55;--on-sun:#1A0A02;--blue:#6EBBFF;--on-blue:#04121F;--brand:#4DB3EA;--on-brand:#06131F;
+    --banner:#1B7FB5;--maroon:#FF8AA0;--metal:#566774;--metal2:#7A8B97;--ray:#C9531F;--ray2:#3A2A3A;--sky1:#6E2A18;--sky2:#A8501F;--sky3:#C9782B;--cloudc:#D78A3C;--sunc:#FFD36A;
+    --sea:#12608F;--tint:#22304F;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1424;--paper:#151E36;--peach:#251F36;--ink:#E8EEFF;--ink2:#A2AED0;--line:#2A3558;--bar:#05080F;
+  --sun:#FF8A55;--on-sun:#1A0A02;--blue:#6EBBFF;--on-blue:#04121F;--brand:#4DB3EA;--on-brand:#06131F;
+  --banner:#1B7FB5;--maroon:#FF8AA0;--metal:#566774;--metal2:#7A8B97;--ray:#C9531F;--ray2:#3A2A3A;--sky1:#6E2A18;--sky2:#A8501F;--sky3:#C9782B;--cloudc:#D78A3C;--sunc:#FFD36A;
+  --sea:#12608F;--tint:#22304F;color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;
+  padding-block:16px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.wrap{max-width:760px;margin:0 auto;display:grid;gap:20px}
+.wrap>*{min-width:0}
+h1,h2,h3,h4,p{margin:0}
+.sun{color:var(--sun)}
+.sat{color:var(--blue)}
+
+button,select{
+  font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);
+  border-radius:6px;min-height:40px;padding:0 14px;
+}
+button{cursor:pointer}
+button:hover{border-color:var(--ink)}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.btn-primary{background:var(--brand);color:var(--on-brand);border-color:var(--brand);font-weight:700}
+.btn-primary:hover{border-color:var(--brand);filter:brightness(1.08)}
+
+.tools{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.tools button{font-weight:700;font-variant-numeric:tabular-nums}
+
+/* 표지 */
+.cover{background:var(--peach);border:1px solid var(--line);overflow:hidden}
+.stage{
+  position:relative;padding:18px 0 0;container-type:inline-size;
+}
+.stage>*{--pw:min(84cqw,440px)}
+.rays{
+  position:relative;width:100%;height:calc(var(--pw)/1.15);overflow:hidden;
+}
+.sky{position:absolute;inset:0;width:100%;height:100%;display:block}
+.orb{position:absolute;left:50%;top:31%;height:50%;aspect-ratio:1/1;transform:translateX(-50%);border-radius:50%;background:var(--sunc);display:flex;justify-content:center;align-items:flex-start;padding-top:calc(var(--pw)*.02)}
+.orb .sd{display:grid;grid-template-columns:auto;justify-items:center;align-content:start;min-width:0;text-align:center;gap:0;color:var(--ink)}
+.orb .sd-m,.orb .sd-d,.orb .sd-w,.orb .sd-l{grid-column:auto;grid-row:auto}
+.orb .sd-m{font-size:calc(var(--pw)*.036);letter-spacing:.1em;line-height:1.2}
+.orb .sd-d{font-size:calc(var(--pw)*.18);line-height:.95;letter-spacing:-.03em}
+.orb .sd-w{margin-top:calc(var(--pw)*.045);font-size:calc(var(--pw)*.036);white-space:nowrap;line-height:1.3}
+.orb .sd-l{display:none}
+@font-face{font-family:"Ownglyph Jaegeonsa";src:url(data:font/ttf;base64,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) format("truetype");font-display:block}
+.brush{
+  position:absolute;left:0;right:0;top:14%;text-align:center;margin:0;
+  font-family:"Ownglyph Jaegeonsa",var(--gungseo);font-weight:700;color:var(--ink);
+  font-size:clamp(2rem,9vw,3.4rem);font-size:calc(var(--pw)*.165);line-height:1.1;text-shadow:0 1px 0 rgba(255,255,255,.55);
+}
+.cloud{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:calc(var(--pw)/1.28*.4);display:block}
+.cloud path{fill:var(--paper)}
+.bird{position:absolute;height:auto;fill:none;stroke:var(--blue);stroke-width:2;stroke-linecap:round;pointer-events:none}
+.bird.b1{left:calc(50% - var(--pw)*.06);bottom:calc(var(--pw)/1.28*.2);width:calc(var(--pw)*.065)}
+.bird.b2{left:calc(50% + var(--pw)*.06);bottom:calc(var(--pw)/1.28*.13);width:calc(var(--pw)*.05)}
+.bird.b3{left:calc(50% + var(--pw)*.2);bottom:calc(var(--pw)/1.28*.18);width:calc(var(--pw)*.04)}
+.sea{
+  display:grid;gap:8px;padding:0 6px 8px;
+  background:repeating-linear-gradient(to bottom,var(--sea) 0 7px,rgba(255,255,255,.4) 7px 8px);
+}
+.sl{position:absolute;left:14px;bottom:9px;z-index:1;color:var(--ink);font-weight:900;font-size:1.1rem;line-height:1;letter-spacing:.01em;font-variant-numeric:tabular-nums}
+.st{
+  position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);overflow:hidden;
+  container-type:inline-size;background:var(--paper);border:1px solid var(--ink);border-top:0;
+}
+button.sb{
+  display:grid;grid-template-rows:auto 1fr auto;justify-items:center;align-items:center;min-width:0;
+  min-height:54px;padding:3px 0 2px;border:0;border-right:1px solid var(--line);border-radius:0;
+  background:transparent;color:var(--ink);font-family:var(--sans);
+}
+button.sb:last-child{border-right:0}
+button.sb:hover{border-color:var(--line)}
+button.sb:not(.today):hover{background:var(--tint)}
+.sw{font-size:clamp(.38rem,1.9cqw,.62rem);font-weight:700;line-height:1.2}
+.sn{font-size:clamp(.45rem,2.4cqw,1.1rem);font-weight:900;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.sl2{font-size:clamp(.32rem,1.4cqw,.52rem);font-weight:700;color:var(--ink2);line-height:1.3;font-variant-numeric:tabular-nums;min-height:.5rem}
+@container (max-width:520px){button.sb .sl2{display:none}}
+button.sb.s0{color:var(--sun)}
+button.sb.s0 .sl2,button.sb.hol .sl2{color:var(--sun)}
+button.sb.s6{color:var(--blue)}
+button.sb.hol{color:var(--sun)}
+button.sb[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--ink)}
+button.sb.today{background:var(--brand);color:var(--on-brand)}
+button.sb.today .sl2{color:var(--on-brand)}
+
+/* 달력 */
+.cal{background:var(--paper);border:1px solid var(--line);padding:14px 12px 10px;display:grid;gap:10px}
+.head{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start}
+.title{text-align:center;display:grid;justify-items:center}
+.mnum{font-weight:900;color:var(--sun);font-size:clamp(4.5rem,20vw,7.5rem);line-height:.95;font-variant-numeric:tabular-nums}
+.mrow{display:flex;gap:10px;align-items:center;justify-content:center;font-size:.7rem;color:var(--ink2);font-weight:500;white-space:nowrap}
+.mrow .men{font-weight:700;color:var(--ink);letter-spacing:.22em}
+
+button.mini{
+  display:grid;gap:3px;text-align:left;padding:4px 6px;min-height:0;border:0;background:transparent;
+  font-size:.45rem;line-height:1.35;width:max-content;border-radius:2px;
+}
+button.mini:hover{background:var(--tint)}
+button.mini.r{justify-self:end}
+.mini .ml{font-weight:700;color:var(--ink)}
+.mini .mg{display:grid;grid-template-columns:repeat(7,1.35em);text-align:center;font-weight:700}
+.mini .mg span{display:block}
+.mini .mh{color:var(--ink2)}
+
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.wk div{background:var(--bar);color:#fff;text-align:center;font-weight:900;padding:5px 0 4px;font-size:.95rem;line-height:1.1;display:grid;justify-items:center;gap:1px}
+.wk div small{font-size:.52rem;font-weight:700;letter-spacing:.06em;opacity:.9}
+.wk .s0{background:var(--sun);color:var(--on-sun)}
+.wk .s6{background:var(--blue);color:var(--on-blue)}
+
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+button.day{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  min-height:4.4rem;padding:0;border:0;border-bottom:1px solid var(--line);border-radius:0;background:transparent;
+  font-family:var(--sans);color:var(--ink);
+}
+button.day:hover{background:var(--tint);border-color:var(--line)}
+.dn{font-weight:900;font-size:clamp(1.7rem,8.4vw,3.1rem);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.dl{position:absolute;left:4px;bottom:3px;font-size:.6rem;font-weight:700;color:var(--ink2);font-variant-numeric:tabular-nums}
+.dh{position:absolute;right:3px;top:3px;font-size:.56rem;font-weight:700;max-width:78%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+button.day.sun,button.day.hol{color:var(--sun)}
+button.day.sat{color:var(--blue)}
+button.day.dim{opacity:.3}
+button.day.today{box-shadow:inset 0 0 0 3px var(--ink)}
+button.day[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);box-shadow:none}
+button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:var(--on-brand)}
+
+.scene{
+  background:var(--paper);border:1px solid var(--line);border-top:6px solid var(--banner);
+  padding:18px 18px 20px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;
+}
+.sd{display:grid;justify-items:center;align-content:start;min-width:6.5rem;text-align:center}
+.sd-m{font-weight:900;font-size:1rem;letter-spacing:.12em}
+.sd-d{font-weight:900;font-size:clamp(4.5rem,18vw,6.5rem);line-height:.95;font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.sd-w{font-weight:700;font-size:.9rem}
+.sd-l{font-size:.78rem;color:var(--ink2);font-variant-numeric:tabular-nums}
+.sc{display:grid;gap:6px;align-content:start}
+.eyebrow{display:inline-block;justify-self:start;background:var(--brand);color:var(--on-brand);font-weight:900;font-size:.78rem;letter-spacing:.2em;padding:2px 10px 2px 12px}
+.fyear{font-weight:900;color:var(--sun);font-size:.95rem}
+.fhead{font-weight:900;font-size:clamp(1.2rem,3.6vw,1.55rem);line-height:1.4;text-wrap:balance}
+.fbody{max-width:38em}
+.fsig{max-width:38em;margin-top:10px;padding:12px 14px;border-left:4px solid var(--brand);background:var(--tint)}
+.fsig-h{font-weight:900;font-size:.9rem;color:var(--brand);letter-spacing:.06em;margin-bottom:4px}
+.fsig-b{font-size:.93rem;line-height:1.75}
+.frefs{display:flex;flex-direction:column;gap:2px;margin-top:8px;font-size:.84rem}
+.frefs .rh{font-weight:700;color:var(--ink2);font-size:.78rem;letter-spacing:.04em;margin-top:2px}
+.frefs a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:3px 0;overflow-wrap:anywhere}
+.stat{color:var(--ink2);font-size:.82rem;font-variant-numeric:tabular-nums;margin-top:4px}
+.tear{animation:tear .22s ease-out}
+@keyframes tear{from{opacity:.45;transform:translateY(-6px) rotate(-.4deg)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.tear{animation:none}}
+
+.rec-top{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:12px}
+.rec-top h3{font-weight:900;font-size:1.25rem}
+.rec-top .cnt{color:var(--ink2);font-size:.85rem;font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.chip{border-radius:999px;min-height:34px;padding:0 14px;font-size:.88rem;font-weight:700;color:var(--brand);border:1px solid var(--brand);background:transparent}
+.chip:hover{border-color:var(--brand);background:var(--tint)}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
+.chip .cnt{margin-left:6px;font-variant-numeric:tabular-nums;opacity:.85}
+.boxes{display:grid;gap:12px}
+.box{display:grid;grid-template-columns:auto minmax(0,1fr);border:2px solid var(--brand);background:var(--paper)}
+.tab{
+  background:var(--brand);color:var(--on-brand);writing-mode:vertical-rl;text-orientation:upright;
+  letter-spacing:.3em;font-weight:900;font-size:.95rem;padding:10px 7px;text-align:center;
+}
+.bx{display:grid}
+.ent{display:grid;grid-template-columns:4.2rem minmax(0,1fr);gap:12px;padding:10px 12px;border-top:1px dashed var(--line)}
+.ent:first-child{border-top:0}
+.ent.plain{grid-template-columns:minmax(0,1fr)}
+.ey{font-weight:900;font-size:1.2rem;line-height:1.25;font-variant-numeric:tabular-nums;text-align:right}
+.ey small{display:block;font-size:.66rem;font-weight:700;color:var(--ink2);line-height:1.3}
+.eh{font-weight:900}
+.eb{font-size:.93rem;max-width:42em}
+.ko-tag{display:inline-block;margin-left:6px;color:var(--sun);border:1px solid currentColor;border-radius:3px;padding:0 5px;font-size:.68rem;font-weight:700;vertical-align:.1em}
+
+
+/* ---- 한눈에 보기 + 가로 타임라인 ---- */
+:root{--r0:#D9481C;--r1:#B7791F;--r2:#1279BE;--r3:#2E8B57;--r4:#7B4BB7;--r5:#0E8C96;--r6:#6B6B6B}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--r0:#FF8A5C;--r1:#E0B04A;--r2:#5BB4F0;--r3:#5CC98A;--r4:#B994F0;--r5:#4FD0DA;--r6:#A0A0A0}}
+:root[data-theme="dark"]{--r0:#FF8A5C;--r1:#E0B04A;--r2:#5BB4F0;--r3:#5CC98A;--r4:#B994F0;--r5:#4FD0DA;--r6:#A0A0A0}
+.ov{border:2px solid var(--brand);background:var(--paper);padding:10px 10px 8px;margin-bottom:18px;container-type:inline-size}
+.ov-h{font-size:.78rem;font-weight:700;color:var(--ink2);margin-bottom:8px}
+.ovg{display:grid;align-items:stretch}
+.ovg>*{min-width:0}
+.ove{font-size:clamp(.5rem,2.5cqw,.74rem);font-weight:900;color:var(--ink);text-align:center;padding:0 0 5px;border-bottom:2px solid var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ovr{display:flex;align-items:center;gap:5px;padding-right:6px;border-bottom:1px solid var(--line);font-weight:900;font-size:clamp(.66rem,3cqw,.84rem);color:var(--rc);text-align:left;background:transparent;border-radius:0;min-height:40px;white-space:nowrap}
+.ovr i{width:9px;height:9px;border-radius:50%;background:var(--rc);flex:none}
+.ovc{display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:5px;padding:5px 2px;border-bottom:1px solid var(--line);border-left:1px dashed var(--line);min-height:40px}
+button.od{position:relative;width:14px;height:14px;min-height:0;padding:0;border-radius:50%;background:var(--rc);border:2px solid var(--paper);box-shadow:0 0 0 1px var(--rc)}
+button.od::after{content:"";position:absolute;inset:-6px}
+button.od:hover{transform:scale(1.3)}
+.ovn{margin-top:8px;font-size:.74rem;color:var(--ink2)}
+.lanes{display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
+.boxes{grid-template-columns:minmax(0,1fr)}
+.boxes>*{min-width:0}
+.lane{min-width:0}
+.lane{scroll-margin-top:10px}
+.lh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.lh b{font-weight:900;font-size:1.05rem;color:var(--rc)}
+.lh .n{font-size:.8rem;color:var(--ink2);margin-right:auto}
+.lh button{min-height:34px;min-width:34px;padding:0;border:1px solid var(--rc);color:var(--rc);background:transparent;border-radius:50%;font-weight:900}
+.lh button:hover{background:var(--tint)}
+.ls{display:flex;overflow-x:auto;padding:0 0 10px;margin:0 -2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+button.lc{position:relative;flex:none;width:min(19rem,86%);text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:22px 12px 8px 2px;display:block}
+button.lc::before{content:"";position:absolute;left:0;right:0;top:9px;height:3px;background:var(--rc);opacity:.45}
+button.lc::after{content:"";position:absolute;left:2px;top:3px;width:15px;height:15px;border-radius:50%;background:var(--rc);border:3px solid var(--bg)}
+.lcb{display:block;border:1px solid var(--line);border-top:3px solid var(--rc);background:var(--paper);padding:8px 10px 10px;height:100%}
+button.lc:hover .lcb{background:var(--tint)}
+.lce{display:block;font-size:.66rem;font-weight:900;color:var(--rc);margin:-2px 0 3px;letter-spacing:.02em}
+.lcy{display:flex;align-items:baseline;gap:6px;font-weight:900;font-size:1.35rem;font-variant-numeric:tabular-nums;line-height:1.1}
+.lcy small{font-size:.68rem;font-weight:700;color:var(--ink2)}
+.lch{display:block;font-weight:900;margin-top:3px}
+.rt{display:inline-block;margin-right:6px;font-size:.66rem;font-weight:900;color:var(--rc);border:1px solid var(--rc);border-radius:3px;padding:0 5px;vertical-align:.12em;white-space:nowrap}
+.lcp{display:block;font-size:.9rem;color:var(--ink);margin-top:4px;line-height:1.6;word-break:keep-all}
+button.lc.sel .lcb{background:color-mix(in srgb,var(--rc) 13%,var(--paper));box-shadow:0 0 0 3px var(--rc),0 6px 14px rgba(0,0,0,.18);transform:translateY(-3px)}
+button.lc.sel::after{width:19px;height:19px;left:0;top:1px;box-shadow:0 0 0 4px color-mix(in srgb,var(--rc) 30%,transparent)}
+button.lc.sel::before{opacity:1}
+.lcb{transition:transform .2s,box-shadow .2s,background .2s}
+button.od.sel{transform:scale(1.55);box-shadow:0 0 0 3px var(--ink);z-index:1}
+
+.empty{border:2px dashed var(--line);padding:26px 18px;text-align:center;display:grid;gap:12px;justify-items:center}
+.empty strong{font-weight:900;font-size:1.1rem}
+.empty p{color:var(--ink2);max-width:30em}
+
+.band{
+  color:#fff;padding:12px 16px 14px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 16px;
+  background:repeating-linear-gradient(to bottom,var(--sea) 0 7px,rgba(255,255,255,.4) 7px 8px);
+  text-shadow:0 1px 0 rgba(0,0,0,.25);
+}
+.band .bn{font-family:var(--gungseo);font-size:2.2rem;line-height:1.1}
+.band .bs{font-size:.88rem;font-weight:700}
+.foot{color:var(--ink2);font-size:.8rem;max-width:46em}
+
+@media (max-width:560px){
+  button.mini{display:none}
+  .head{grid-template-columns:1fr}
+  .scene{grid-template-columns:minmax(0,1fr);gap:14px}
+  .sd{grid-template-columns:auto auto;justify-content:start;justify-items:start;align-items:end;column-gap:14px;min-width:0;text-align:left}
+  .sd-m,.sd-w,.sd-l{grid-column:2}
+  .sd-d{grid-column:1;grid-row:1/4}
+  .ent{grid-template-columns:3.4rem minmax(0,1fr);gap:10px}
+  .ent.plain{grid-template-columns:minmax(0,1fr)}
+  .ey{font-size:1.05rem}
+}
+</style>
+
+<div class="wrap">
+  <nav class="tools" aria-label="달 이동">
+    <button id="prevM" type="button"></button>
+    <button id="today" type="button">오늘</button>
+    <button id="nextM" type="button"></button>
+  </nav>
+
+  <header class="cover">
+    <div class="stage">
+      <div class="rays">
+        <svg class="sky" viewBox="0 0 128 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="strg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="82"><stop offset="0" style="stop-color:var(--sky1)"/><stop offset="1" style="stop-color:var(--sky3)"/></linearGradient></defs>
+          <g fill="url(#strg)">
+          <rect x="0" y="1.30" width="128" height="7.40"/>
+          <rect x="0" y="14.99" width="128" height="6.33"/>
+          <rect x="0" y="26.69" width="128" height="5.41"/>
+          <rect x="0" y="36.70" width="128" height="4.63"/>
+          <rect x="0" y="45.26" width="128" height="3.95"/>
+          <rect x="0" y="52.58" width="128" height="3.38"/>
+          <rect x="0" y="58.83" width="128" height="2.89"/>
+          <rect x="0" y="64.18" width="128" height="2.47"/>
+          <rect x="0" y="68.75" width="128" height="2.11"/>
+          <rect x="0" y="72.66" width="128" height="1.81"/>
+          <rect x="0" y="76.00" width="128" height="1.54"/>
+          <rect x="0" y="78.86" width="128" height="1.32"/>
+          <rect x="0" y="81.30" width="128" height="1.13"/>
+          </g>
+        </svg>
+        <div class="orb">
+<div class="sd">
+      <div class="sd-m" id="sdM"></div>
+      <div class="sd-d" id="sdD"></div>
+      <div class="sd-w" id="sdW"></div>
+      <div class="sd-l" id="sdL"></div>
+    </div>
+        </div>
+        <h1 class="brush">기억의 날짜</h1>
+      </div>
+      <svg class="cloud" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 200V120C20 112 50 108 80 112C90 70 150 52 200 78C225 30 310 14 365 58C395 36 450 32 480 62C520 20 620 8 680 54C710 34 770 36 795 66C830 44 900 58 915 92C945 84 975 96 1000 110V200Z"/></svg>
+      <svg class="bird b1" viewBox="0 0 26 10" aria-hidden="true"><path d="M1 8Q7 0 13 7Q19 0 25 8"/></svg>
+      <svg class="bird b2" viewBox="0 0 26 10" aria-hidden="true"><path d="M1 8Q7 0 13 7Q19 0 25 8"/></svg>
+      <svg class="bird b3" viewBox="0 0 26 10" aria-hidden="true"><path d="M1 8Q7 0 13 7Q19 0 25 8"/></svg>
+      <div class="sl" id="seaLbl"></div>
+    </div>
+    <div class="sea">
+      <div class="st" id="strip" role="group" aria-label="일자 선택"></div>
+    </div>
+  </header>
+
+  <section class="cal" aria-label="월간 달력" hidden>
+    <div class="head">
+      <button class="mini" id="miniP" type="button"></button>
+      <div class="title">
+        <div class="mnum" id="mnum"></div>
+        <div class="mrow"><span id="seoki"></span><span class="men" id="men"></span><span id="ganji"></span></div>
+      </div>
+      <button class="mini r" id="miniN" type="button"></button>
+    </div>
+    <div class="wk" id="wk"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="scene" id="scene" aria-live="polite">
+    <div class="sc">
+      <div class="eyebrow">이날의 한 장면</div>
+      <div class="fyear" id="fyear"></div>
+      <h2 class="fhead" id="fhead"></h2>
+      <p class="fbody" id="fbody"></p>
+      <div class="fsig" id="fsigBox" hidden>
+        <h3 class="fsig-h">역사적 의의</h3>
+        <p class="fsig-b" id="fsig"></p>
+        <div class="frefs" id="frefs"></div>
+      </div>
+      <p class="stat" id="stat"></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="rec-top">
+      <h3>이날의 기억</h3>
+      <span class="cnt" id="count"></span>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="boxes" id="list"></div>
+  </section>
+
+  <section id="notesSec"><div class="boxes" id="notes"></div></section>
+
+  <div class="band"><span class="bn">기억의 날짜</span><span class="bs">오늘 날짜의 역사와 인문학</span></div>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+(function(){
+'use strict';
+var TYPES=['사건','기념일'];
+var REGIONS=['한국','아시아','유럽','아프리카','아메리카','오세아니아','기타'];
+
+var SEED={
+'10-21':{
+featured:{y:1805,r:'유럽',head:'트라팔가르 해전, 넬슨은 승리의 순간에 쓰러졌다',body:'스페인 남서쪽 앞바다에서 영국 함대가 프랑스·에스파냐 연합 함대를 격파했다. 이 승리로 영국의 제해권이 굳어졌고 나폴레옹의 영국 상륙 구상도 사실상 접혔다. 넬슨은 전투 중 저격당했고, 숨을 거두기 전에 승리 소식을 들었다고 전해진다.',sig:'트라팔가르에서 영국 해군이 프랑스·에스파냐 연합 함대를 꺾으면서 나폴레옹은 영국 본토 상륙 계획을 사실상 접었습니다. 이후 19세기 내내 영국이 바다를 지배하는 질서가 이어졌고, 이는 영국의 무역과 제국 확장의 바탕이 되었습니다. 넬슨의 전사는 승리와 희생이 함께 기억되는 영웅 서사의 전형이 되었고, 런던 트라팔가 광장의 이름으로도 남았습니다.',refs:[{t:'Battle of Trafalgar | Britannica',u:'https://www.britannica.com/event/Battle-of-Trafalgar-European-history'},{t:'Battle of Trafalgar | Wikipedia',u:'https://en.wikipedia.org/wiki/Battle_of_Trafalgar'}]},
+events:[
+{y:310,r:'유럽',t:'사건',dt:'10.21 (전승)',head:'교황 에우세비오 선종',body:'박해 시기에 막센티우스 황제에게 시칠리아로 추방된 교황 에우세비오가 그곳에서 숨졌다고 전해진다. 배교자를 교회가 어떻게 받아들일지를 두고 일어난 갈등의 한복판에 있던 인물이다.'},
+{y:686,r:'유럽',t:'사건',head:'교황 코논 선출',body:'교황 요한 5세가 죽은 뒤 로마에서 코논이 새 교황으로 선출되었다. 비잔티움 제국 황제의 승인을 받아야 하던 시기였고, 로마 군대와 성직자 사이의 추천 다툼 끝에 정해졌다.'},
+{y:1994,r:'한국',t:'사건',head:'성수대교 붕괴',body:'서울 성수대교의 상판 일부가 무너져 내려 32명이 숨졌다. 출근과 등교 시간대에 일어나 큰 충격을 주었고, 시설 안전 관리를 되돌아보게 한 사고로 남았다.'},
+{y:1994,r:'한국',t:'사건',head:'제네바 북미 기본합의서 서명',body:'미국과 북한이 제네바에서 기본합의서에 서명했다. 북한이 핵 시설을 동결하는 대신 경수로와 중유를 제공받기로 한 합의였다.'},
+{y:1096,r:'아시아',t:'사건',head:'키보토스 전투, 민중 십자군의 비극',body:'제1차 십자군의 본대보다 먼저 출발한 민중 십자군이 소아시아에서 셀주크 튀르크군에게 궤멸되었다. 농민과 순례자가 뒤섞인 무리여서 튀르크 궁기병의 매복에 크게 무너졌다.'},
+{y:1097,r:'아시아',t:'사건',head:'안티오키아 공성전 시작',body:'제1차 십자군이 시리아 북부의 안티오키아(지금의 튀르키예 안타키아) 성벽 앞에 진을 쳤다. 여러 달에 걸친 포위 끝에 이듬해 6월 도시를 손에 넣었다.'},
+{y:1600,r:'아시아',t:'사건',head:'세키가하라 전투',body:'일본 세키가하라에서 도쿠가와 이에야스의 동군이 이시다 미쓰나리의 서군을 꺾었다. 임진왜란이 끝난 지 2년 만의 일로, 이 승리가 1603년 에도 막부 개창으로 이어졌다.'},
+{y:1895,r:'아시아',t:'사건',head:'타이난 함락',body:'일본군이 타이난을 점령하면서 타이완 민주국의 저항이 사실상 끝났다. 청일전쟁 뒤 타이완에 대한 일본의 식민 지배가 본격화된 계기였다.'},
+{y:1943,r:'아시아',t:'사건',head:'자유 인도 임시정부 수립 선언',body:'수바스 찬드라 보세가 싱가포르에서 자유 인도 임시정부의 수립을 선언했다. 일본의 지원 아래 영국 식민 지배에 맞서 인도국민군을 꾸린 시도였다.'},
+{y:1944,r:'아시아',t:'사건',head:'가미카제 공격의 시작',body:'필리핀 레이테 만 전투 중 일본 항공기가 호주 순양함 오스트레일리아호에 부딪쳤다. 조직적인 가미카제 특공이 시작되던 시기와 맞물려 최초의 가미카제 공격으로 기록되기도 한다.'},
+{y:1805,r:'유럽',t:'사건',head:'트라팔가르 해전',body:'넬슨이 이끄는 영국 함대가 스페인 남서쪽 앞바다에서 프랑스·에스파냐 연합 함대를 크게 이겼다. 이후 19세기 내내 영국 해군의 우위가 이어졌고, 넬슨은 이 전투에서 전사했다.'},
+{y:1824,r:'유럽',t:'사건',head:'포틀랜드 시멘트 특허',body:'영국의 조지프 애스프딘이 포틀랜드 시멘트의 제조법으로 특허를 얻었다. 석회석과 점토를 구워 만든 이 재료는 근대 콘크리트 건축의 바탕이 되었다.'},
+{y:1854,r:'유럽',t:'사건',head:'나이팅게일, 크림 전쟁터로',body:'플로렌스 나이팅게일이 간호사 38명과 함께 영국을 떠나 크림 전쟁의 야전병원으로 향했다. 위생 개선과 통계 기록으로 사망률을 낮춘 사례로 남았다.'},
+{y:1904,r:'유럽',t:'사건',dt:'10.21~22',head:'도거 뱅크 사건',body:'러일전쟁 중 러시아 발트 함대가 21일 밤 북해에서 영국 어선단을 일본 어뢰정으로 착각해 포격했다. 영국과 러시아의 관계가 전쟁 직전까지 치달았다가 국제 조사로 수습되었다.'},
+{y:1941,r:'유럽',t:'사건',dt:'10.20~21',head:'크라구예바츠 학살',body:'독일 점령군이 세르비아 크라구예바츠에서 독일군 사상자에 대한 보복으로 민간인을 대량 학살했다. 희생자는 수천 명으로 추정되며 학생과 교사도 포함되었다.'},
+{y:1944,r:'유럽',t:'사건',head:'아헨 함락',body:'독일 서부의 아헨 수비대가 미군에 항복했다. 연합군이 점령한 첫 독일 대도시로, 독일 본토 진입을 상징하는 사건이었다.'},
+{y:1945,r:'유럽',t:'사건',head:'프랑스 여성, 총선에 처음 참여',body:'프랑스 여성이 국민의회 선거에서 처음으로 투표했다. 참정권은 1944년 법령으로 보장되었고, 실제 투표는 1945년 4월 지방선거에서 먼저 이루어졌다.'},
+{y:1960,r:'유럽',t:'사건',head:'영국 최초의 원자력 잠수함 진수',body:'엘리자베스 2세 여왕이 영국 최초의 원자력 잠수함 드레드노트호를 진수시켰다. 냉전기 해군력 경쟁이 원자력 추진 시대로 넘어가던 때였다.'},
+{y:1966,r:'유럽',t:'사건',head:'아버판 참사',body:'웨일스 남부 탄광 마을 아버판에서 폐석 더미가 무너져 내려 초등학교를 덮쳤다. 어린이 116명을 포함해 144명이 숨졌다.'},
+{y:1969,r:'유럽',t:'사건',head:'빌리 브란트, 서독 총리에 선출',body:'서독 연방의회가 사회민주당의 빌리 브란트를 총리로 선출했다. 전후 처음으로 사민당이 이끄는 정부가 들어섰고, 이후 동유럽과의 관계를 풀어 가는 동방정책이 추진되었다.'},
+{y:1983,r:'유럽',t:'사건',head:'1미터의 새 정의',body:'파리에서 열린 국제도량형총회가 1미터를 빛이 진공에서 299,792,458분의 1초 동안 나아가는 거리로 다시 정의했다.'},
+{y:1798,r:'아프리카',t:'사건',dt:'10.21~22',head:'카이로 봉기',body:'나폴레옹의 이집트 원정군이 점령한 카이로에서 시민들이 봉기했다. 프랑스군은 며칠 만에 무력으로 진압했고, 이 일은 점령군과 현지 사회 사이의 골을 드러냈다.'},
+{y:1964,r:'아프리카',t:'사건',head:'수단 10월 혁명의 도화선',body:'수단 하르툼에서 학생 시위 중 학생이 숨진 일을 계기로 반정부 시위가 번졌다. 시위는 총파업으로 이어져 군사정권이 물러나는 10월 혁명으로 발전했다.'},
+{y:1967,r:'아프리카',t:'사건',head:'이스라엘 구축함 에일라트호 격침',body:'이집트 해군의 미사일 고속정이 포트사이드 앞바다에서 이스라엘 구축함 에일라트호를 격침했다. 대함 미사일로 군함을 침몰시킨 첫 사례로 꼽혀 해군 전술에 큰 영향을 주었다.'},
+{y:1969,r:'아프리카',t:'사건',head:'시아드 바레의 쿠데타',body:'소말리아에서 군부의 시아드 바레가 쿠데타로 권력을 잡았다. 이후 20년 넘게 집권했다.'},
+{y:1520,r:'아메리카',t:'사건',head:'마젤란, 훗날 자신의 이름이 붙은 해협에 닿다',body:'페르디난드 마젤란의 함대가 남아메리카 남단의 해협 입구에 이르렀다. 함대는 이 좁고 험한 물길을 지나 태평양으로 나아갔고, 세계 일주 항해의 가장 큰 고비를 넘겼다.'},
+{y:1797,r:'아메리카',t:'사건',head:'컨스티튜션호 진수',body:'미국 해군의 범선 컨스티튜션호가 보스턴에서 진수되었다. 지금도 취역 상태로 물에 떠 있는 가장 오래된 군함으로 꼽힌다.'},
+{y:1861,r:'아메리카',t:'사건',head:'볼스블러프 전투',body:'미국 남북전쟁 초기에 북군이 포토맥강가의 볼스블러프에서 패했다. 상원의원 출신의 에드워드 베이커 대령이 전사했고, 이 패배는 의회가 전쟁 수행을 감시하는 위원회를 두는 계기가 되었다.'},
+{y:1867,r:'아메리카',t:'사건',head:'메디신 로지 조약',body:'미국 정부가 캔자스 남부에서 키오와, 코만치 등 평원 부족과 조약을 맺었다. 부족들은 보호구역으로 옮기기로 했으나 약속은 제대로 지켜지지 않았다.'},
+{y:1872,r:'아메리카',t:'사건',head:'샌환 제도 분쟁의 중재',body:'독일 황제 빌헬름 1세가 영국과 미국이 다투던 샌환 제도의 귀속을 미국 쪽으로 판정했다. 돼지 한 마리에서 비롯된 돼지 전쟁은 사람이 다치지 않은 채 중재로 마무리되었다.'},
+{y:1879,r:'아메리카',t:'사건',dt:'10.21 또는 22',head:'에디슨의 탄소 필라멘트 전구',body:'토머스 에디슨이 멘로파크에서 탄소 필라멘트 백열전구의 장시간 점등 시험에 성공한 날로 흔히 꼽힌다. 자료에 따라 10월 22일로 적기도 한다.'},
+{y:1929,r:'아메리카',t:'사건',head:'빛의 황금 희년',body:'미시간주 디어본에서 에디슨의 전구 발명 50주년을 기념하는 행사가 열렸다. 에디슨이 전구 점등 실험을 재현했고 허버트 후버 대통령 등이 참석했다.'},
+{y:1959,r:'아메리카',t:'사건',head:'구겐하임 미술관 개관',body:'뉴욕의 솔로몬 R. 구겐하임 미술관이 문을 열었다. 설계자 프랭크 로이드 라이트는 개관 반년쯤 전에 세상을 떠났다.'},
+{y:1967,r:'아메리카',t:'사건',head:'펜타곤 행진',body:'워싱턴 D.C.에서 베트남전 반대 시위대가 국방부 청사로 행진했다. 미국 반전 운동의 분기점으로 자주 언급된다.'},
+{y:1945,r:'한국',t:'기념일',head:'경찰의 날의 기원',body:'10월 21일은 한국의 경찰의 날이다. 1945년 이날 미군정 아래 경무국이 창설된 것을 기념한다.'},
+{y:1990,r:'유럽',t:'기념일',head:'애플 데이',body:'영국에서는 10월 21일을 사과 품종과 과수원 문화를 되새기는 애플 데이로 지낸다. 1990년 환경 단체 커먼 그라운드가 시작했다.'}
+],
+notes:[
+{head:'미터는 어떻게 자연 상수가 되었나',body:'프랑스 혁명기에 미터는 북극에서 적도까지 자오선 길이의 1천만분의 1로 정해졌다. 이후 백금 원기와 크립톤 원자의 빛 파장을 거쳐 1983년에 빛의 속도로 정의가 바뀌었다. 기준이 물건에서 자연의 법칙으로 옮겨 간 과정이다.'},
+{head:'발명가 한 사람이라는 이야기',body:'에디슨 이전에도 영국의 조지프 스완 등 여러 사람이 백열전구를 다듬고 있었다. 에디슨의 몫은 전구 하나보다 필라멘트 재료 탐색, 발전과 배선까지 묶은 체계에 가깝다. 발명이 번뜩임이 아니라 누적과 조직의 결과임을 보여 주는 사례다.'},
+{head:'한 단어를 바꾼 신호',body:'넬슨이 처음 구상한 문장은 영국이 각자의 의무를 다하리라고 믿는다는 뜻이었다. 신호 어휘집에 없는 단어는 한 글자씩 깃발로 풀어야 해서 기대한다는 표현으로 바꾸었다고 전해진다. 도구의 제약이 역사적 문장의 모양을 바꾼 사례다.'},
+{head:'통계로 설득한 간호사',body:'나이팅게일은 간호사이자 통계학자였다. 병사의 사망 원인을 부채꼴 모양의 도표로 그려 정부와 의회를 설득했고, 왕립통계학회의 첫 여성 회원이 되었다. 숫자와 그림이 정책을 움직인 이른 사례다.'}
+]}
+};
+
+var pad=function(n){return String(n).padStart(2,'0')};
+var keyOf=function(m,d){return pad(m)+'-'+pad(d)};
+var dim=function(y,m){return new Date(y,m,0).getDate()};
+var WD=['일','월','화','수','목','금','토'];
+var WE=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+var MEN=['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+var MON=['Jan.','Feb.','Mar.','Apr.','May','Jun.','Jul.','Aug.','Sep.','Oct.','Nov.','Dec.'];
+var MEN3=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+var STEM='甲乙丙丁戊己庚辛壬癸',BRANCH='子丑寅卯辰巳午未申酉戌亥';
+var NOW=new Date();
+var TY=NOW.getFullYear(),TM=NOW.getMonth()+1,TD=NOW.getDate();
+
+var LF=null;
+try{LF=new Intl.DateTimeFormat('ko-KR-u-ca-chinese',{month:'numeric',day:'numeric'})}catch(e){LF=null}
+function lunarParts(dt){
+  if(!LF)return null;
+  try{
+    var mo='',da='';
+    LF.formatToParts(dt).forEach(function(p){if(p.type==='month')mo=p.value;if(p.type==='day')da=p.value});
+    var n=mo.match(/\d+/),dd=da.match(/\d+/);
+    if(!n||!dd)return null;
+    return {m:+n[0],d:+dd[0],leap:/윤|bis/i.test(mo)};
+  }catch(e){return null}
+}
+
+var HOL={};
+function holidaysFor(y){
+  if(HOL[y])return HOL[y];
+  var H={},subs=[];
+  var k=function(dt){return (dt.getMonth()+1)+'-'+dt.getDate()};
+  var fixed=[[1,1,'신정',0],[3,1,'삼일절',1],[5,5,'어린이날',1],[6,6,'현충일',0],[8,15,'광복절',1],[10,3,'개천절',1],[10,9,'한글날',1],[12,25,'성탄절',1]];
+  fixed.forEach(function(f){
+    var dt=new Date(y,f[0]-1,f[1]);
+    H[k(dt)]=f[2];
+    if(f[3]&&(dt.getDay()===0||dt.getDay()===6))subs.push(dt);
+  });
+  for(var t=new Date(y,0,1);t.getFullYear()===y;t.setDate(t.getDate()+1)){
+    var L=lunarParts(t);
+    if(!L||L.leap)continue;
+    var c=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+    if(L.m===4&&L.d===8){
+      H[k(c)]='부처님오신날';
+      if(c.getDay()===0||c.getDay()===6)subs.push(c);
+    }else if((L.m===1||L.m===8)&&L.d===1+(L.m===8?14:0)){
+      var nm=L.m===1?'설':'추석';
+      var a=new Date(c.getFullYear(),c.getMonth(),c.getDate()-1);
+      var b=new Date(c.getFullYear(),c.getMonth(),c.getDate()+1);
+      H[k(a)]=nm+' 연휴';H[k(c)]=nm+(L.m===1?'날':'');H[k(b)]=nm+' 연휴';
+      if(a.getDay()===0||c.getDay()===0||b.getDay()===0)subs.push(b);
+    }
+  }
+  subs.sort(function(a,b){return a-b});
+  subs.forEach(function(s){
+    var c=new Date(s.getFullYear(),s.getMonth(),s.getDate()+1);
+    while(c.getDay()===0||c.getDay()===6||H[k(c)])c.setDate(c.getDate()+1);
+    if(c.getFullYear()===y)H[k(c)]='대체공휴일';
+  });
+  HOL[y]=H;
+  return H;
+}
+function holOf(dt){return holidaysFor(dt.getFullYear())[(dt.getMonth()+1)+'-'+dt.getDate()]||''}
+function dayCls(dt){
+  var w=dt.getDay(),h=holOf(dt);
+  return (w===0?'sun':w===6?'sat':'')+(h&&w!==0?' hol':'');
+}
+
+function normalize(raw){
+  if(!raw||!Array.isArray(raw.events))return null;
+  var ev=[];
+  raw.events.forEach(function(x){
+    if(!x||x.t==='탄생'||x.t==='서거')return;
+    var y=Number(x.y),head=String(x.head||'').trim(),body=String(x.body||'').trim();
+    if(!isFinite(y)||!head)return;
+    ev.push({y:Math.trunc(y),r:REGIONS.indexOf(x.r)>=0?x.r:'기타',t:TYPES.indexOf(x.t)>=0?x.t:'사건',dt:String(x.dt||'').trim().slice(0,14),head:head.slice(0,60),body:body.slice(0,320)});
+  });
+  if(ev.length<3)return null;
+  ev.sort(function(a,b){return a.y-b.y});
+  var notes=(Array.isArray(raw.notes)?raw.notes:[]).slice(0,4).map(function(n){
+    return {head:String(n&&n.head||'').slice(0,50),body:String(n&&n.body||'').slice(0,420)};
+  }).filter(function(n){return n.head&&n.body});
+  var f=raw.featured&&raw.featured.head?raw.featured:null;
+  var feat=f?{y:Math.trunc(Number(f.y))||ev[0].y,r:REGIONS.indexOf(f.r)>=0?f.r:'기타',head:String(f.head).slice(0,70),body:String(f.body||'').slice(0,420),sig:String(f.sig||'').slice(0,700),refs:(Array.isArray(f.refs)?f.refs:[]).filter(function(x){return x&&typeof x.u==='string'&&/^https:\/\//.test(x.u)}).slice(0,3).map(function(x){return {t:String(x.t||x.u).slice(0,80),u:x.u}})}
+            :{y:ev[0].y,r:ev[0].r,head:ev[0].head,body:ev[0].body,sig:'',refs:[]};
+  return {events:ev.slice(0,48),notes:notes,featured:feat};
+}
+Object.keys(SEED).forEach(function(k){SEED[k]=normalize(SEED[k])});
+
+var S={y:TY,m:TM,d:TD,region:'전체',loading:false,error:'',sample:undefined,consented:false,gen:{},timer:null};
+
+function dataFor(k){
+  if(SEED[k])return SEED[k];
+  if(S.gen[k])return S.gen[k];
+  try{
+    var raw=localStorage.getItem('gen3-'+k);
+    if(raw){var v=normalize(JSON.parse(raw));if(v){S.gen[k]=v;return v}}
+  }catch(e){}
+  return null;
+}
+
+function el(tag,cls,text){
+  var n=document.createElement(tag);
+  if(cls)n.className=cls;
+  if(text!=null)n.textContent=text;
+  return n;
+}
+function $(id){return document.getElementById(id)}
+function yearText(y){return y<0?'기원전 '+(-y)+'년':y+'년'}
+
+function buildPrompt(m,d){
+  return '당신은 한국어로 글을 쓰는 역사·인문학 편집자입니다. 양력 '+m+'월 '+d+'일에 일어난 역사적 사건과 이날에 얽힌 기념일을 아래 JSON 형식으로만 답하세요. 설명, 머리말, 코드 블록 표시는 쓰지 않습니다.\n\n'+
+  '{"featured":{"y":1805,"r":"유럽","head":"한 줄 제목","body":"두세 문장 설명","sig":"역사적 의의 서너 문장","refs":[]},"events":[{"y":1805,"r":"유럽","t":"사건","dt":"","head":"짧은 제목","body":"한두 문장 설명"}],"notes":[{"head":"개념 또는 이야기 제목","body":"두세 문장 설명"}]}\n\n'+
+  '규칙:\n- events는 날짜를 확실히 확인할 수 있는 것만 최대한 많이, 24개에서 40개. 기원전과 서기 1000년 이전의 고대·중세 초기 사건을 확실한 것이 있으면 빠뜨리지 말고 최소 3개 넣고, 그 시대에 확실한 사건이 정말 없을 때만 줄입니다. 고대 사건은 율리우스력이나 다른 달력으로 전해지는 날짜일 수 있으니 확실하지 않으면 dt에 전승 같은 표시를 남깁니다. 고대부터 현대까지, 정치·전쟁·과학·기술·문화·사상·재난 등 분야를 폭넓게 섞습니다.\n- r은 사건이 일어난 곳을 기준으로 한국, 아시아(한국 제외), 유럽, 아프리카, 아메리카, 오세아니아 중 하나입니다. 각 지역에서 확실한 사건을 가능한 한 고르게 찾되, 억지로 채우지 않습니다. 한국 관련 사건은 가능한 한 많이 넣습니다.\n- t는 사건 또는 기념일만 씁니다. 사람의 탄생과 서거는 넣지 않습니다. y는 정수이며 기원전은 음수로 씁니다.\n- 날짜가 자료마다 다르거나 며칠에 걸친 사건은 dt에 예를 들어 10.21~22 또는 10.21 또는 22처럼 적습니다. 그렇지 않으면 dt는 빈 문자열로 둡니다.\n- 연도, 숫자, 인명, 날짜가 확실하지 않으면 그 항목을 빼세요. 지어내지 마세요.\n- 각 body는 한두 문장으로, 무슨 일이 있었고 왜 의미가 있는지 담습니다. 문장은 "~했다" 체로 쓰고 과장과 광고 문구는 피합니다.\n- notes는 3개. 그날의 사건과 연결되는 철학, 문학, 예술, 언어, 사상사의 개념이나 일화를 고릅니다.\n- featured는 events 중 가장 이야기할 만한 항목 하나를 풀어 쓴 것입니다. sig에는 그 사건이 이후 역사에 끼친 영향과 의미를 서너 문장으로 설명하고, 해석이 갈리면 그렇다고 적습니다. refs는 확실히 존재하는 공신력 있는 자료(브리태니커, 위키백과, 박물관·도서관·정부 기관 등)의 https 주소만 넣고, 확신이 없으면 빈 배열로 둡니다.';
+}
+
+function errMsg(code){
+  if(code==='not_granted')return 'Claude 호출 권한이 허용되지 않았습니다. 권한을 허용하면 다른 날짜의 기억도 볼 수 있습니다.';
+  if(code==='rate_limited')return '요청이 잠시 몰렸습니다. 조금 뒤에 다시 시도해 주세요.';
+  if(code==='bad_format')return '응답 형식이 올바르지 않았습니다. 다시 시도해 주세요.';
+  return '기억을 불러오지 못했습니다. 다시 시도해 주세요.';
+}
+
+function load(){
+  if(!S.sample||S.loading)return;
+  var k=keyOf(S.m,S.d),m=S.m,d=S.d;
+  S.loading=true;S.error='';show();
+  Promise.resolve().then(function(){
+    return S.sample.json(buildPrompt(m,d),{modelTier:'default'});
+  }).then(function(v){
+    var n=normalize(v);
+    if(!n)throw {code:'bad_format'};
+    S.gen[k]=n;S.consented=true;
+    try{localStorage.setItem('gen3-'+k,JSON.stringify(n))}catch(e){}
+  }).catch(function(e){
+    S.error=(e&&e.code)||'error';
+  }).then(function(){
+    S.loading=false;show();
+  });
+}
+
+function go(y,m,d){
+  S.y=y;S.m=m;S.d=d;S.error='';
+  var s=$('scene');
+  s.classList.remove('tear');void s.offsetWidth;s.classList.add('tear');
+  show();
+}
+function monthShift(delta){
+  var t=new Date(S.y,S.m-1+delta,1);
+  var y=t.getFullYear(),m=t.getMonth()+1;
+  go(y,m,Math.min(S.d,dim(y,m)));
+}
+
+function buildMini(btn,y,m){
+  btn.textContent='';
+  btn.setAttribute('aria-label',y+'년 '+m+'월로 이동');
+  btn.appendChild(el('span','ml',y+'  '+m+'  '+MEN3[m-1]));
+  var g=el('span','mg');
+  for(var i=0;i<7;i++){var h=el('span','mh'+(i===0?' sun':i===6?' sat':''),WD[i]);g.appendChild(h)}
+  var first=new Date(y,m-1,1).getDay(),n=dim(y,m);
+  for(var j=0;j<first;j++)g.appendChild(el('span',null,''));
+  for(var d=1;d<=n;d++){
+    var dt=new Date(y,m-1,d);
+    g.appendChild(el('span',dayCls(dt).replace('hol','sun'),String(d)));
+  }
+  btn.appendChild(g);
+}
+
+function renderCal(){
+  var y=S.y,m=S.m;
+  $('mnum').textContent=m;
+  $('seoki').textContent='西紀'+y;
+  $('men').textContent=MEN[m-1];
+  $('ganji').textContent=STEM[(y-4)%10]+BRANCH[(y-4)%12]+'年';
+  var pm=new Date(y,m-2,1),nm=new Date(y,m,1);
+  buildMini($('miniP'),pm.getFullYear(),pm.getMonth()+1);
+  buildMini($('miniN'),nm.getFullYear(),nm.getMonth()+1);
+  $('prevM').textContent='‹ '+(pm.getMonth()+1)+'월';
+  $('prevM').setAttribute('aria-label',pm.getFullYear()+'년 '+(pm.getMonth()+1)+'월');
+  $('nextM').textContent=(nm.getMonth()+1)+'월 ›';
+  $('nextM').setAttribute('aria-label',nm.getFullYear()+'년 '+(nm.getMonth()+1)+'월');
+
+  var wk=$('wk');
+  if(!wk.children.length){
+    for(var i=0;i<7;i++){var c=el('div','s'+i);c.appendChild(document.createTextNode(WD[i]));c.appendChild(el('small',null,WE[i]));wk.appendChild(c)}
+  }
+  var first=new Date(y,m-1,1).getDay(),n=dim(y,m),weeks=Math.ceil((first+n)/7);
+  var grid=$('grid');grid.textContent='';
+  for(var k=0;k<weeks*7;k++){
+    var dt=new Date(y,m-1,1-first+k);
+    var inM=dt.getMonth()===m-1;
+    var b=el('button','day '+dayCls(dt)+(inM?'':' dim')+(dt.getFullYear()===TY&&dt.getMonth()+1===TM&&dt.getDate()===TD?' today':''));
+    b.type='button';
+    b.dataset.y=dt.getFullYear();b.dataset.m=dt.getMonth()+1;b.dataset.d=dt.getDate();
+    var sel=inM&&dt.getDate()===S.d;
+    b.setAttribute('aria-pressed',sel?'true':'false');
+    b.setAttribute('aria-label',(dt.getMonth()+1)+'월 '+dt.getDate()+'일 '+WD[dt.getDay()]+'요일');
+    b.appendChild(el('span','dn',String(dt.getDate())));
+    var L=lunarParts(dt);
+    if(L)b.appendChild(el('span','dl',(L.leap?'윤':'')+L.m+'.'+L.d));
+    var h=holOf(dt);
+    if(h)b.appendChild(el('span','dh',h));
+    grid.appendChild(b);
+  }
+}
+
+function renderCover(){
+  var y=S.y,m=S.m,yy='\u2019'+pad(y%100);
+  $('seaLbl').textContent=y+' '+MON[m-1];
+  var st=$('strip'),keep=st.scrollLeft,had=st.contains(document.activeElement);
+  st.textContent='';
+  var HJ='\u65E5\u6708\u706B\u6C34\u6728\u91D1\u571F';
+  for(var d=1;d<=dim(y,m);d++){
+    var dt=new Date(y,m-1,d),w=dt.getDay(),h=holOf(dt);
+    var b=el('button','sb s'+w+(h&&w!==0?' hol':'')+(y===TY&&m===TM&&d===TD?' today':''));
+    b.type='button';
+    b.dataset.d=d;
+    b.setAttribute('aria-pressed',d===S.d?'true':'false');
+    b.setAttribute('aria-label',m+'월 '+d+'일 '+WD[w]+'요일'+(h?' '+h:''));
+    b.appendChild(el('span','sw',HJ.charAt(w)));
+    b.appendChild(el('span','sn',String(d)));
+    var L=lunarParts(dt);
+    b.appendChild(el('span','sl2',L?(L.leap?'윤':'')+L.m+'.'+L.d:''));
+    st.appendChild(b);
+  }
+  st.scrollLeft=keep;
+  var sel=st.querySelector('button[aria-pressed="true"]');
+  if(sel){
+    var l=sel.offsetLeft,r=l+sel.offsetWidth;
+    if(l<st.scrollLeft||r>st.scrollLeft+st.clientWidth)st.scrollLeft=l-(st.clientWidth-sel.offsetWidth)/2;
+    if(had)sel.focus({preventScroll:true});
+  }
+}
+
+function renderScene(data){
+  var dt=new Date(S.y,S.m-1,S.d),w=dt.getDay(),h=holOf(dt);
+  $('sdM').textContent=S.m+'월';
+  $('sdD').textContent=S.d;
+  $('sdD').className='sd-d '+dayCls(dt);
+  $('sdW').textContent=WD[w]+'요일'+(h?' · '+h:'');
+  var L=lunarParts(dt);
+  $('sdL').textContent=L?'음력 '+(L.leap?'윤':'')+L.m+'월 '+L.d+'일':'';
+  var doy=Math.round((dt-new Date(S.y,0,1))/864e5)+1;
+  var total=new Date(S.y,1,29).getMonth()===1?366:365;
+  $('stat').textContent=S.y+'년의 '+doy+'번째 날 · 남은 날 '+(total-doy)+'일';
+  if(data){
+    var f=data.featured;
+    $('fyear').textContent=yearText(f.y)+' · '+f.r;
+    $('fhead').textContent=f.head;
+    $('fbody').textContent=f.body;
+    var sb=$('fsigBox'),fr=$('frefs');
+    fr.textContent='';
+    $('fsig').textContent=f.sig||'';
+    if(f.sig||(f.refs&&f.refs.length)){
+      sb.hidden=false;
+      $('fsig').hidden=!f.sig;
+      sb.querySelector('.fsig-h').hidden=!f.sig;
+      if(f.refs&&f.refs.length){
+        fr.appendChild(el('div','rh','참고 자료'));
+        f.refs.forEach(function(x){
+          var a=el('a',null,x.t);a.href=x.u;a.target='_blank';a.rel='noopener noreferrer';fr.appendChild(a);
+        });
+      }
+    }else sb.hidden=true;
+  }else{
+    $('fsigBox').hidden=true;
+    $('fyear').textContent='';
+    $('fhead').textContent=S.loading?'기억을 정리하는 중입니다':'이 날의 기억을 기다리고 있습니다';
+    $('fbody').textContent='기억이 준비되면 가장 이야기할 만한 장면이 이곳에 실립니다.';
+  }
+}
+
+function mkBox(label){
+  var b=el('div','box');
+  b.appendChild(el('div','tab',label));
+  var c=el('div','bx');
+  b.appendChild(c);
+  return {root:b,body:c};
+}
+
+function renderEmpty(list){
+  var box=el('div','empty');
+  var title=S.m+'월 '+S.d+'일의 기억';
+  if(S.loading){
+    box.appendChild(el('strong',null,title+'을 정리하는 중입니다'));
+    box.appendChild(el('p',null,'Claude가 이날의 사건과 인물, 인문학 이야기를 고르고 있습니다. 잠시만 기다려 주세요.'));
+  }else if(S.sample===undefined){
+    box.appendChild(el('strong',null,title+'은 아직 없습니다'));
+    box.appendChild(el('p',null,'불러오기 기능을 확인하는 중입니다.'));
+  }else if(S.sample===null){
+    box.appendChild(el('strong',null,title+'은 이 화면에서 만들 수 없습니다'));
+    box.appendChild(el('p',null,'지금 환경에서는 Claude를 호출할 수 없어 10월 21일 기억만 볼 수 있습니다.'));
+    var b0=el('button','btn-primary','10월 21일 기억 보기');b0.type='button';
+    b0.addEventListener('click',function(){go(S.y,10,21)});box.appendChild(b0);
+  }else{
+    box.appendChild(el('strong',null,title+'을 불러올 수 있습니다'));
+    box.appendChild(el('p',null,S.error?errMsg(S.error):'Claude가 이날의 기억을 작성합니다. 처음 한 번은 권한 확인이 나타납니다.'));
+    if(S.error!=='not_granted'){
+      var b=el('button','btn-primary',S.error?'다시 시도':'이 날짜 기억 불러오기');b.type='button';
+      b.addEventListener('click',load);box.appendChild(b);
+    }
+  }
+  list.appendChild(box);
+}
+
+var RC={'한국':'--r0','아시아':'--r1','유럽':'--r2','아프리카':'--r3','아메리카':'--r4','오세아니아':'--r5','기타':'--r6','기념일':'--r6'};
+var EB=[-1e9,1,1000,1500,1700,1800,1900,1950,2000];
+var EL=['기원전','1~999년','1000년대','1500~1699년','1700년대','1800년대','1900~1949년','1950~1999년','2000년 이후'];
+var ES=['BC','~999','1000','1500','1700','1800','1900','1950','2000'];
+function eraOf(y){var k=0;for(var i=0;i<EB.length;i++){if(y>=EB[i])k=i}return k}
+function yrTxt(y){return y<0?'기원전 '+(-y):String(y)}
+
+function renderRecords(data){
+  var list=$('list');list.textContent='';
+  var chips=$('chips');chips.textContent='';
+  if(!data){$('count').textContent='';renderEmpty(list);return}
+  var counts={};
+  data.events.forEach(function(e){counts[e.r]=(counts[e.r]||0)+1});
+  if(S.region!=='전체'&&!counts[S.region])S.region='전체';
+  function chip(name,n){
+    var b=el('button','chip',name);b.type='button';
+    b.setAttribute('aria-pressed',S.region===name?'true':'false');
+    b.appendChild(el('span','cnt',String(n)));
+    b.addEventListener('click',function(){S.region=name;show()});
+    chips.appendChild(b);
+  }
+  chip('전체',data.events.length);
+  REGIONS.forEach(function(r){if(counts[r])chip(r,counts[r])});
+
+  var regs=REGIONS.filter(function(r){return counts[r]});
+  var cards={};
+  var dots={};
+  function keyOf2(e){return e.y+'|'+e.head}
+  function mark(){
+    Object.keys(cards).forEach(function(k){cards[k].classList.toggle('sel',k===S.sel);cards[k].setAttribute('aria-current',k===S.sel?'true':'false')});
+    Object.keys(dots).forEach(function(k){dots[k].forEach(function(d){d.classList.toggle('sel',k===S.sel)})});
+  }
+  function center(k,smooth){
+    var c=cards[k];if(!c)return;
+    var st=c.parentNode;
+    var cr=c.getBoundingClientRect(),sr=st.getBoundingClientRect();
+    var left=st.scrollLeft+(cr.left-sr.left)-(st.clientWidth-cr.width)/2;
+    st.scrollTo({left:Math.max(0,left),behavior:smooth?'smooth':'auto'});
+  }
+
+  /* 한눈에 보기: 지역 줄 × 시대 칸, 사건 하나가 점 하나 */
+  var eras=[];
+  data.events.forEach(function(e){var k=eraOf(e.y);if(eras.indexOf(k)<0)eras.push(k)});
+  eras.sort(function(a,b){return a-b});
+  var ov=el('div','ov');
+  ov.appendChild(el('div','ov-h','한눈에 보기 · 점 하나가 사건 하나입니다. 점을 누르면 아래 카드로 이동합니다'));
+  var g=el('div','ovg');
+  g.style.gridTemplateColumns='4.6em repeat('+eras.length+',minmax(0,1fr))';
+  g.appendChild(el('span'));
+  eras.forEach(function(k){g.appendChild(el('span','ove',ES[k]))});
+  var all=data.events.slice();
+  regs.forEach(function(r){
+    var lab=el('button','ovr');lab.type='button';
+    lab.style.setProperty('--rc','var('+RC[r]+')');
+    lab.appendChild(document.createTextNode(r));
+    lab.addEventListener('click',function(){S.region=(S.region===r?'전체':r);show()});
+    g.appendChild(lab);
+    eras.forEach(function(k){
+      var cell=el('div','ovc');
+      all.filter(function(e){return e.r===r&&eraOf(e.y)===k}).forEach(function(e){
+        var d=el('button','od');d.type='button';d.style.setProperty('--rc','var('+RC[r]+')');
+        d.title=yrTxt(e.y)+' '+e.head;d.setAttribute('aria-label',yrTxt(e.y)+'년 '+e.head);
+        d.addEventListener('click',function(){
+          S.sel=keyOf2(e);S.center=true;
+          if(S.region!=='전체'&&S.region!==r)S.region='전체';
+          show();
+        });
+        (dots[keyOf2(e)]=dots[keyOf2(e)]||[]).push(d);
+        cell.appendChild(d);
+      });
+      g.appendChild(cell);
+    });
+  });
+  ov.appendChild(g);
+  ov.appendChild(el('div','ovn','가로 칸은 시대(BC는 기원전), 세로 줄은 지역입니다. 지역 이름을 누르면 그 지역만 모아 봅니다.'));
+  list.appendChild(ov);
+
+  /* 가로 타임라인 한 줄: 전체 탭은 모든 사건, 지역 탭은 그 지역만 */
+  var lanes=el('div','lanes');
+  var items=data.events.filter(function(e){return S.region==='전체'||e.r===S.region});
+  var name=S.region, rc=S.region==='전체'?'--brand':RC[S.region];
+  var lane=el('section','lane');lane.style.setProperty('--rc','var('+rc+')');
+  var lh=el('div','lh');
+  lh.appendChild(el('b',null,name==='전체'?'전체 타임라인':name+' 타임라인'));
+  lh.appendChild(el('span','n',items.length+'건 · 옆으로 밀어서 보기'));
+  var st=el('div','ls');st.tabIndex=0;st.setAttribute('aria-label',name+' 타임라인');
+  var pv=el('button',null,'‹');pv.type='button';pv.setAttribute('aria-label','이전');
+  var nx=el('button',null,'›');nx.type='button';nx.setAttribute('aria-label','다음');
+  pv.addEventListener('click',function(){st.scrollBy({left:-st.clientWidth*.8,behavior:'smooth'})});
+  nx.addEventListener('click',function(){st.scrollBy({left:st.clientWidth*.8,behavior:'smooth'})});
+  lh.appendChild(pv);lh.appendChild(nx);lane.appendChild(lh);
+  var lastEra=-9;
+  items.forEach(function(e){
+    var c=el('button','lc');c.type='button';c.style.setProperty('--rc','var('+RC[e.r]+')');
+    var box=el('span','lcb');
+    var k=eraOf(e.y);
+    if(k!==lastEra){box.appendChild(el('span','lce',EL[k]));lastEra=k}
+    var y=el('span','lcy');
+    y.appendChild(document.createTextNode(yrTxt(e.y)));
+    y.appendChild(el('small',null,e.dt||(S.m+'.'+S.d)));
+    box.appendChild(y);
+    var hd=el('span','lch');
+    if(name==='전체')hd.appendChild(el('span','rt',e.r+(e.t==='기념일'?' · 기념일':'')));
+    else if(e.t==='기념일')hd.appendChild(el('span','rt','기념일'));
+    hd.appendChild(document.createTextNode(e.head));
+    box.appendChild(hd);
+    if(e.body)box.appendChild(el('span','lcp',e.body));
+    c.appendChild(box);
+    c.addEventListener('click',function(){S.sel=(S.sel===keyOf2(e)?'':keyOf2(e));mark();if(S.sel)center(S.sel,true)});
+    cards[keyOf2(e)]=c;
+    st.appendChild(c);
+  });
+  lane.appendChild(st);lanes.appendChild(lane);
+  list.appendChild(lanes);
+  if(!cards[S.sel])S.sel='';
+  mark();
+  if(S.center&&S.sel){
+    S.center=false;
+    center(S.sel,false);
+    var ln=lanes.querySelector('.lane');
+    if(ln&&ln.scrollIntoView)ln.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  $('count').textContent=items.length+'건';
+}
+
+function renderNotes(data){
+  var sec=$('notesSec'),box=$('notes');box.textContent='';
+  if(!data||!data.notes.length){sec.hidden=true;return}
+  sec.hidden=false;
+  var bx=mkBox('인문학');
+  data.notes.forEach(function(n){
+    var row=el('div','ent plain');
+    var main=el('div');
+    main.appendChild(el('div','eh',n.head));
+    main.appendChild(el('p','eb',n.body));
+    row.appendChild(main);
+    bx.body.appendChild(row);
+  });
+  box.appendChild(bx.root);
+}
+
+function renderFoot(data){
+  var f=$('foot');
+  var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
+  if(!data){f.textContent=base;return}
+  f.textContent=(SEED[keyOf(S.m,S.d)]
+    ?'이 날의 기억은 널리 알려진 역사 지식을 바탕으로 정리했습니다. 자료마다 날짜가 다른 항목은 본문에 적어 두었습니다. '
+    :'이 날의 기억은 Claude가 작성했습니다. 연도와 수치는 다른 자료로 한 번 더 확인해 주세요. ')+base;
+}
+
+function show(){
+  var k=keyOf(S.m,S.d);
+  var data=dataFor(k);
+  renderCover();renderCal();renderScene(data);renderRecords(data);renderNotes(data);renderFoot(data);
+  clearTimeout(S.timer);
+  if(!data&&S.sample&&S.consented&&!S.loading&&!S.error){
+    S.timer=setTimeout(function(){
+      if(keyOf(S.m,S.d)===k&&!dataFor(k))load();
+    },350);
+  }
+}
+
+$('prevM').addEventListener('click',function(){monthShift(-1)});
+$('nextM').addEventListener('click',function(){monthShift(1)});
+$('miniP').addEventListener('click',function(){monthShift(-1)});
+$('miniN').addEventListener('click',function(){monthShift(1)});
+$('today').addEventListener('click',function(){var t=new Date();go(t.getFullYear(),t.getMonth()+1,t.getDate())});
+$('grid').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('button.day'):null;
+  if(b)go(+b.dataset.y,+b.dataset.m,+b.dataset.d);
+});
+
+$('strip').addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('button.sb'):null;
+  if(b)go(S.y,S.m,+b.dataset.d);
+});
+
+if(window.claude&&typeof window.claude.use==='function'){
+  window.claude.use('sample').then(function(fn){S.sample=fn||null;show()}).catch(function(){S.sample=null;show()});
+}else{
+  S.sample=null;
+}
+show();
+})();
+</script>
