@@ -31,20 +31,7 @@
   --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --gungseo:"Gungsuh","궁서","궁서체","GungsuhChe","GungSeo","Noto Serif KR","Batang",serif;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0E1424;--paper:#151E36;--peach:#251F36;--ink:#E8EEFF;--ink2:#A2AED0;--line:#2A3558;--bar:#05080F;
-    --sun:#FF8A55;--on-sun:#1A0A02;--blue:#6EBBFF;--on-blue:#04121F;--brand:#4DB3EA;--on-brand:#06131F;
-    --banner:#1B7FB5;--maroon:#FF8AA0;--metal:#566774;--metal2:#7A8B97;--ray:#C9531F;--ray2:#3A2A3A;--sky1:#6E2A18;--sky2:#A8501F;--sky3:#C9782B;--cloudc:#D78A3C;--sunc:#FFD36A;
-    --sea:#12608F;--tint:#22304F;color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0E1424;--paper:#151E36;--peach:#251F36;--ink:#E8EEFF;--ink2:#A2AED0;--line:#2A3558;--bar:#05080F;
-  --sun:#FF8A55;--on-sun:#1A0A02;--blue:#6EBBFF;--on-blue:#04121F;--brand:#4DB3EA;--on-brand:#06131F;
-  --banner:#1B7FB5;--maroon:#FF8AA0;--metal:#566774;--metal2:#7A8B97;--ray:#C9531F;--ray2:#3A2A3A;--sky1:#6E2A18;--sky2:#A8501F;--sky3:#C9782B;--cloudc:#D78A3C;--sunc:#FFD36A;
-  --sea:#12608F;--tint:#22304F;color-scheme:dark;
-}
+:root{color-scheme:light}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 body{
@@ -250,8 +237,6 @@ button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:va
 
 /* ---- 한눈에 보기 + 가로 타임라인 ---- */
 :root{--r0:#D9481C;--r1:#B7791F;--r2:#1279BE;--r3:#2E8B57;--r4:#7B4BB7;--r5:#0E8C96;--r6:#6B6B6B}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--r0:#FF8A5C;--r1:#E0B04A;--r2:#5BB4F0;--r3:#5CC98A;--r4:#B994F0;--r5:#4FD0DA;--r6:#A0A0A0}}
-:root[data-theme="dark"]{--r0:#FF8A5C;--r1:#E0B04A;--r2:#5BB4F0;--r3:#5CC98A;--r4:#B994F0;--r5:#4FD0DA;--r6:#A0A0A0}
 .ov{border:2px solid var(--brand);background:var(--paper);padding:10px 10px 8px;margin-bottom:18px;container-type:inline-size}
 .ov-h{font-size:.78rem;font-weight:700;color:var(--ink2);margin-bottom:8px}
 .ovg{display:grid;align-items:stretch}
