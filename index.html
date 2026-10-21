@@ -226,9 +226,12 @@ button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:va
 
 /* ---- 인문학 카드 ---- */
 #notesSec{margin-top:6px}
-.nh{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
-.nh b{display:block;background:var(--brand);color:var(--on-brand);font-weight:900;font-size:1.05rem;padding:6px 14px}
-.nct{font-size:.85rem;color:var(--ink2);font-variant-numeric:tabular-nums}
+.nh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;background:var(--brand);color:var(--on-brand);padding:9px 16px}
+.nh b{font-weight:900;font-size:1.1rem}
+.nct{font-size:.9rem;font-weight:700;font-variant-numeric:tabular-nums}
+.nw{display:flex;flex-direction:column;gap:2px;padding:8px 12px;background:var(--tint);border-left:4px solid var(--sun)}
+.nw b{font-size:.95rem;color:var(--sun);font-variant-numeric:tabular-nums}
+.nw span{font-size:.9rem;font-weight:800;word-break:keep-all}
 .ntrack{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
 .ntrack::-webkit-scrollbar{display:none}
 .ncard{flex:0 0 90%;min-width:0;scroll-snap-align:start;box-sizing:border-box;border:2px solid var(--brand);background:var(--paper);padding:20px 18px 22px;min-height:min(72vh,36rem);display:flex;flex-direction:column;gap:14px}
@@ -493,7 +496,7 @@ function normalize(raw){
   if(ev.length<3)return null;
   ev.sort(function(a,b){return a.y-b.y});
   var notes=(Array.isArray(raw.notes)?raw.notes:[]).slice(0,4).map(function(n){
-    return {head:String(n&&n.head||'').slice(0,50),body:String(n&&n.body||'').slice(0,420),x:String(n&&n.x||'').slice(0,520),q:String(n&&n.q||'').slice(0,140)};
+    return {head:String(n&&n.head||'').slice(0,50),body:String(n&&n.body||'').slice(0,420),x:String(n&&n.x||'').slice(0,520),q:String(n&&n.q||'').slice(0,140),w:String(n&&n.w||'').slice(0,90)};
   }).filter(function(n){return n.head&&n.body});
   var f=raw.featured&&raw.featured.head?raw.featured:null;
   var feat=f?{y:Math.trunc(Number(f.y))||ev[0].y,r:REGIONS.indexOf(f.r)>=0?f.r:'기타',head:String(f.head).slice(0,70),body:String(f.body||'').slice(0,1000),sig:String(f.sig||'').slice(0,400),refs:(Array.isArray(f.refs)?f.refs:[]).filter(function(x){return x&&typeof x.u==='string'&&/^https:\/\//.test(x.u)}).slice(0,3).map(function(x){return {t:String(x.t||x.u).slice(0,80),u:x.u}})}
@@ -519,8 +522,8 @@ function yearText(y){return y<0?'기원전 '+(-y)+'년':y+'년'}
 
 function buildPrompt(m,d){
   return '당신은 한국어로 글을 쓰는 역사·인문학 편집자입니다. 양력 '+m+'월 '+d+'일에 일어난 역사적 사건과 이날에 얽힌 기념일을 아래 JSON 형식으로만 답하세요. 설명, 머리말, 코드 블록 표시는 쓰지 않습니다.\n\n'+
-  '{"featured":{"y":1805,"r":"유럽","head":"한 줄 제목","body":"사건의 배경, 전개, 이후 결과와 중요한 이유를 앞뒤 맥락으로 이어 쓴 예닐곱 문장","sig":"역사적 의의 한두 문장(평서문 ~다 체)","refs":[]},"events":[{"y":1805,"r":"유럽","t":"사건","dt":"","head":"짧은 제목","body":"한두 문장 설명"}],"notes":[{"head":"개념 또는 이야기 제목","body":"두세 문장 설명","x":"배경과 더 깊은 이야기 두세 문장","q":"생각해 볼 질문 한 문장"}]}\n\n'+
-  '규칙:\n- events는 날짜를 확실히 확인할 수 있는 것만 최대한 많이, 24개에서 40개. 기원전과 서기 1000년 이전의 고대·중세 초기 사건을 확실한 것이 있으면 빠뜨리지 말고 최소 3개 넣고, 그 시대에 확실한 사건이 정말 없을 때만 줄입니다. 고대 사건은 율리우스력이나 다른 달력으로 전해지는 날짜일 수 있으니 확실하지 않으면 dt에 전승 같은 표시를 남깁니다. 고대부터 현대까지, 정치·전쟁·과학·기술·문화·사상·재난 등 분야를 폭넓게 섞습니다.\n- r은 사건이 일어난 곳을 기준으로 한국, 아시아(한국 제외), 유럽, 아프리카, 아메리카, 오세아니아 중 하나입니다. 각 지역에서 확실한 사건을 가능한 한 고르게 찾되, 억지로 채우지 않습니다. 한국 관련 사건은 가능한 한 많이 넣습니다.\n- t는 사건 또는 기념일만 씁니다. 사람의 탄생과 서거는 넣지 않습니다. y는 정수이며 기원전은 음수로 씁니다.\n- 날짜가 자료마다 다르거나 며칠에 걸친 사건은 dt에 예를 들어 10.21~22 또는 10.21 또는 22처럼 적습니다. 그렇지 않으면 dt는 빈 문자열로 둡니다.\n- 연도, 숫자, 인명, 날짜가 확실하지 않으면 그 항목을 빼세요. 지어내지 마세요.\n- 각 body는 한두 문장으로, 무슨 일이 있었고 왜 의미가 있는지 담습니다. 문장은 "~했다" 체로 쓰고 과장과 광고 문구는 피합니다.\n- notes는 3개이며 각각 body(두세 문장), x(배경과 이후 이야기 두세 문장), q(생각해 볼 질문 한 문장)를 씁니다. 그날의 사건과 연결되는 철학, 문학, 예술, 언어, 사상사의 개념이나 일화를 고릅니다.\n- featured는 events 중 가장 이야기할 만한 항목 하나를 풀어 쓴 것입니다. sig에는 그 사건이 이후 역사에 끼친 영향과 의미를 서너 문장으로 설명하고, 해석이 갈리면 그렇다고 적습니다. refs는 확실히 존재하는 공신력 있는 자료(브리태니커, 박물관·도서관·정부 기관, 백과사전, 주요 언론 등. 위키백과는 제외)의 https 주소만 넣고, 확신이 없으면 빈 배열로 둡니다.';
+  '{"featured":{"y":1805,"r":"유럽","head":"한 줄 제목","body":"사건의 배경, 전개, 이후 결과와 중요한 이유를 앞뒤 맥락으로 이어 쓴 예닐곱 문장","sig":"역사적 의의 한두 문장(평서문 ~다 체)","refs":[]},"events":[{"y":1805,"r":"유럽","t":"사건","dt":"","head":"짧은 제목","body":"한두 문장 설명"}],"notes":[{"head":"개념 또는 이야기 제목","body":"두세 문장 설명","x":"배경과 더 깊은 이야기 두세 문장","q":"생각해 볼 질문 한 문장","w":"1805.10.21 · 관련 역사적 사건 이름"}]}\n\n'+
+  '규칙:\n- events는 날짜를 확실히 확인할 수 있는 것만 최대한 많이, 24개에서 40개. 기원전과 서기 1000년 이전의 고대·중세 초기 사건을 확실한 것이 있으면 빠뜨리지 말고 최소 3개 넣고, 그 시대에 확실한 사건이 정말 없을 때만 줄입니다. 고대 사건은 율리우스력이나 다른 달력으로 전해지는 날짜일 수 있으니 확실하지 않으면 dt에 전승 같은 표시를 남깁니다. 고대부터 현대까지, 정치·전쟁·과학·기술·문화·사상·재난 등 분야를 폭넓게 섞습니다.\n- r은 사건이 일어난 곳을 기준으로 한국, 아시아(한국 제외), 유럽, 아프리카, 아메리카, 오세아니아 중 하나입니다. 각 지역에서 확실한 사건을 가능한 한 고르게 찾되, 억지로 채우지 않습니다. 한국 관련 사건은 가능한 한 많이 넣습니다.\n- t는 사건 또는 기념일만 씁니다. 사람의 탄생과 서거는 넣지 않습니다. y는 정수이며 기원전은 음수로 씁니다.\n- 날짜가 자료마다 다르거나 며칠에 걸친 사건은 dt에 예를 들어 10.21~22 또는 10.21 또는 22처럼 적습니다. 그렇지 않으면 dt는 빈 문자열로 둡니다.\n- 연도, 숫자, 인명, 날짜가 확실하지 않으면 그 항목을 빼세요. 지어내지 마세요.\n- 각 body는 한두 문장으로, 무슨 일이 있었고 왜 의미가 있는지 담습니다. 문장은 "~했다" 체로 쓰고 과장과 광고 문구는 피합니다.\n- notes는 3개이며 각각 body(두세 문장), x(배경과 이후 이야기 두세 문장), q(생각해 볼 질문 한 문장), w(관련 역사적 사건의 날짜와 이름, 예: 1805.10.21 · 트라팔가르 해전)를 씁니다. 그날의 사건과 연결되는 철학, 문학, 예술, 언어, 사상사의 개념이나 일화를 고릅니다.\n- featured는 events 중 가장 이야기할 만한 항목 하나를 풀어 쓴 것입니다. sig에는 그 사건이 이후 역사에 끼친 영향과 의미를 서너 문장으로 설명하고, 해석이 갈리면 그렇다고 적습니다. refs는 확실히 존재하는 공신력 있는 자료(브리태니커, 박물관·도서관·정부 기관, 백과사전, 주요 언론 등. 위키백과는 제외)의 https 주소만 넣고, 확신이 없으면 빈 배열로 둡니다.';
 }
 
 function errMsg(code){
@@ -829,7 +832,9 @@ function renderNotes(data){
   track.setAttribute('tabindex','0');track.setAttribute('aria-label','인문학 이야기 카드, 옆으로 넘겨 보세요');
   data.notes.forEach(function(it,i){
     var c=el('article','ncard');
-    c.appendChild(el('div','nno',(i+1)+' / '+n));
+    if(it.w){var wd=el('div','nw'),pp=it.w.split(' · ');
+      if(pp.length>1){wd.appendChild(el('b',null,pp[0]));wd.appendChild(el('span',null,pp.slice(1).join(' · ')))}else wd.appendChild(el('span',null,it.w));
+      c.appendChild(wd)}
     c.appendChild(el('h3','nti',it.head));
     c.appendChild(el('p','nbo',it.body));
     if(it.x)c.appendChild(el('p','nxt',it.x));
