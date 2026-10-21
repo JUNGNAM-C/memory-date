@@ -185,8 +185,10 @@ button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:va
 .rec-top{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:12px}
 .rec-top h3{font-weight:900;font-size:1.25rem}
 .rec-top .cnt{color:var(--ink2);font-size:.85rem;font-variant-numeric:tabular-nums}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-.chip{border-radius:999px;min-height:34px;padding:0 14px;font-size:.88rem;font-weight:700;color:var(--brand);border:1px solid var(--brand);background:transparent}
+.chips{display:flex;flex-wrap:nowrap;gap:3px;margin:0;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:1 1 auto;min-width:0;border-radius:999px;min-height:34px;padding:0 6px;font-size:.74rem;letter-spacing:-.03em;white-space:nowrap;font-weight:700;color:var(--brand);border:1px solid var(--brand);background:transparent}
+@media (max-width:380px){.chip{font-size:.68rem;padding:0 4px}}
 .chip:hover{border-color:var(--brand);background:var(--tint)}
 .chip[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
 .chip .cnt{margin-left:6px;font-variant-numeric:tabular-nums;opacity:.85}
@@ -218,7 +220,7 @@ button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:va
 .nw span{font-size:.9rem;font-weight:800;word-break:keep-all}
 .ntrack{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding-bottom:4px;scrollbar-width:none}
 .ntrack::-webkit-scrollbar{display:none}
-.ncard{flex:0 0 90%;min-width:0;scroll-snap-align:start;box-sizing:border-box;border:2px solid var(--brand);background:var(--paper);padding:20px 18px 22px;min-height:min(72vh,36rem);display:flex;flex-direction:column;gap:14px}
+.ncard{flex:0 0 100%;min-width:0;scroll-snap-align:start;box-sizing:border-box;border:2px solid var(--brand);background:var(--paper);padding:20px 18px 22px;min-height:min(72vh,36rem);display:flex;flex-direction:column;gap:14px}
 .ncard:only-child{flex-basis:100%}
 .nno{font-size:.8rem;font-weight:800;color:var(--sun);letter-spacing:.04em}
 .nti{margin:0;word-break:keep-all;font-size:1.4rem;line-height:1.35;font-weight:900;color:var(--ink)}
@@ -382,14 +384,11 @@ button.od.sel{transform:scale(1.55);box-shadow:0 0 0 3px var(--ink);z-index:1}
       <h3>이날의 기억</h3>
       <span class="cnt" id="count"></span>
     </div>
-    <div class="chips" id="chips"></div>
     <div class="boxes" id="list"></div>
   </section>
 
   <section id="notesSec"><div class="boxes" id="notes"></div></section>
 
-  <div class="band"><span class="bn">기억의 날짜</span><span class="bs">오늘 날짜의 역사와 인문학</span></div>
-  <p class="foot" id="foot"></p>
 </div>
 
 <script>
@@ -765,7 +764,7 @@ function yrTxt(y){return y<0?'기원전 '+(-y):String(y)}
 
 function renderRecords(data){
   var list=$('list');list.textContent='';
-  var chips=$('chips');chips.textContent='';
+  var chips=el('div','chips');chips.id='chips';
   if(!data){$('count').textContent='';renderEmpty(list);return}
   var counts={};
   data.events.forEach(function(e){counts[e.r]=(counts[e.r]||0)+1});
@@ -773,7 +772,6 @@ function renderRecords(data){
   function chip(name,n){
     var b=el('button','chip',name);b.type='button';
     b.setAttribute('aria-pressed',S.region===name?'true':'false');
-    b.appendChild(el('span','cnt',String(n)));
     b.addEventListener('click',function(){S.region=name;show()});
     chips.appendChild(b);
   }
@@ -832,6 +830,7 @@ function renderRecords(data){
   ov.appendChild(g);
   ov.appendChild(el('div','ovn','가로 칸은 시대(BC는 기원전), 세로 줄은 지역입니다. 지역 이름을 누르면 그 지역만 모아 봅니다.'));
   list.appendChild(ov);
+  list.appendChild(chips);
 
   /* 가로 타임라인 한 줄: 전체 탭은 모든 사건, 지역 탭은 그 지역만 */
   var lanes=el('div','lanes');
@@ -907,7 +906,7 @@ function renderNotes(data){
   var dots=el('div','ndots');
   data.notes.forEach(function(_,i){
     var b=el('button','ndot');b.type='button';b.setAttribute('aria-label',(i+1)+'번째 카드');
-    b.addEventListener('click',function(){track.scrollTo({left:track.clientWidth*0.9*i,behavior:'smooth'})});
+    b.addEventListener('click',function(){track.scrollTo({left:(track.clientWidth+12)*i,behavior:'smooth'})});
     dots.appendChild(b);
   });
   box.appendChild(dots);
@@ -922,7 +921,7 @@ function renderNotes(data){
 }
 
 function renderFoot(data){
-  var f=$('foot');
+  var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
   if(!data){f.textContent=base;return}
   f.textContent=(SEED[keyOf(S.m,S.d)]
