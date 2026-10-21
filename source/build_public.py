@@ -69,4 +69,3 @@ s=s.replace("<title>기억의 날짜</title>","<title>기억의 날짜</title>",
 if '<meta charset' not in s:
     s=s.replace('<title>','<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<title>',1)
 open('index.html','w',encoding='utf-8').write(s)
-open('check.js','w').write(re.findall(r'<script>(.*?)</script>',s,re.S)[-1])
