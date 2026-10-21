@@ -99,13 +99,13 @@ button:hover{border-color:var(--ink)}
 .bird.b2{left:calc(50% + var(--pw)*.06);bottom:calc(var(--pw)/1.28*.13);width:calc(var(--pw)*.05)}
 .bird.b3{left:calc(50% + var(--pw)*.2);bottom:calc(var(--pw)/1.28*.18);width:calc(var(--pw)*.04)}
 .sea{
-  display:grid;gap:8px;padding:0 6px 8px;
+  display:grid;gap:0;padding:14px 8px;
   background:repeating-linear-gradient(to bottom,var(--sea) 0 7px,rgba(255,255,255,.4) 7px 8px);
 }
 .sl{position:absolute;left:14px;bottom:9px;z-index:1;color:var(--ink);font-weight:900;font-size:1.1rem;line-height:1;letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .st{pointer-events:none;
   position:relative;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);overflow:hidden;
-  container-type:inline-size;background:var(--paper);border:1px solid var(--ink);border-top:0;
+  container-type:inline-size;background:var(--paper);border:0;
 }
 button.sb{
   display:grid;grid-template-rows:auto 1fr auto;justify-items:center;align-items:center;min-width:0;
