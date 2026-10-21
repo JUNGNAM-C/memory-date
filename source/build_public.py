@@ -70,5 +70,5 @@ if '<meta charset' not in s:
     s=s.replace('<title>','<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n<title>',1)
 
 # 홈 화면 아이콘과 매니페스트
-s=s.replace('<title>','<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">\n<link rel="manifest" href="manifest.webmanifest">\n<meta name="theme-color" content="#E5501B">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="기억의 날짜">\n<title>',1)
+s=s.replace('<title>','<meta name="color-scheme" content="only light">\n<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=3">\n<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=3">\n<link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=3">\n<link rel="manifest" href="manifest.webmanifest?v=3">\n<meta name="theme-color" content="#E5501B">\n<meta name="apple-mobile-web-app-capable" content="yes">\n<meta name="mobile-web-app-capable" content="yes">\n<meta name="apple-mobile-web-app-title" content="기억의 날짜">\n<title>',1)
 open('index.html','w',encoding='utf-8').write(s)
