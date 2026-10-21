@@ -10,10 +10,6 @@
     {
      "t": "Battle of Trafalgar | Britannica",
      "u": "https://www.britannica.com/event/Battle-of-Trafalgar-European-history"
-    },
-    {
-     "t": "Battle of Trafalgar | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Battle_of_Trafalgar"
     }
    ]
   },
@@ -306,10 +302,6 @@
     {
      "t": "Cuban Missile Crisis | JFK Library",
      "u": "https://www.jfklibrary.org/learn/about-jfk/jfk-in-history/cuban-missile-crisis"
-    },
-    {
-     "t": "Cuban Missile Crisis | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Cuban_Missile_Crisis"
     }
    ]
   },
@@ -581,10 +573,6 @@
     {
      "t": "Alberto Santos-Dumont | Britannica",
      "u": "https://www.britannica.com/biography/Alberto-Santos-Dumont"
-    },
-    {
-     "t": "Alberto Santos-Dumont | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Alberto_Santos-Dumont"
     }
    ]
   },
@@ -916,10 +904,6 @@
     {
      "t": "Peace of Westphalia | Britannica",
      "u": "https://www.britannica.com/event/Peace-of-Westphalia"
-    },
-    {
-     "t": "Peace of Westphalia | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Peace_of_Westphalia"
     }
    ]
   },
@@ -1293,8 +1277,8 @@
      "u": "https://www.newsis.com/view/NISX20231023_0002493263"
     },
     {
-     "t": "독도 | 위키백과",
-     "u": "https://ko.wikipedia.org/wiki/독도"
+     "t": "독도, 아름다운 우리 섬 | 대한민국 외교부",
+     "u": "https://dokdo.mofa.go.kr/"
     }
    ]
   },
@@ -1580,12 +1564,12 @@
    "sig": "명량 해전은 정유재란 중 칠천량 해전의 참패로 바닥에 떨어졌던 조선 수군이 흐름을 되돌린 전투입니다. 일본 수군이 서해로 올라가 육군과 합류하려던 계획이 막혀, 전쟁의 전개에 큰 영향을 주었습니다. 숫자의 열세를 지형과 조류, 지휘관의 결단으로 뒤집은 사례로 해군 전술사에서도 높게 평가됩니다.",
    "refs": [
     {
-     "t": "명량 해전 | 위키백과",
-     "u": "https://ko.wikipedia.org/wiki/명량_해전"
+     "t": "명량대첩 | 한국민족문화대백과사전",
+     "u": "https://encykorea.aks.ac.kr/Article/E0018250"
     },
     {
-     "t": "Battle of Myeongnyang | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Battle_of_Myeongnyang"
+     "t": "해남 명량대첩비 | 한국민족문화대백과사전",
+     "u": "https://encykorea.aks.ac.kr/Article/E0018251"
     }
    ]
   },
@@ -1895,12 +1879,12 @@
    "sig": "아르히포프의 이야기는 핵무기 발사 결정이 최종적으로 사람의 판단에 달려 있었음을 보여줍니다. 당시 B-59 잠수함은 통신이 끊겨 전쟁이 이미 시작되었는지 알 수 없었다고 전해집니다. 위기 상황에서 '절차'와 '한 사람의 신중함'이 어떻게 역사의 방향을 바꿀 수 있는지를 되묻는 사례로 자주 소개됩니다. 다만 당시 상황을 두고 증언이 엇갈리는 부분도 있습니다.",
    "refs": [
     {
-     "t": "Vasily Arkhipov | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Vasily_Arkhipov"
-    },
-    {
      "t": "Cuban Missile Crisis | JFK Library",
      "u": "https://www.jfklibrary.org/learn/about-jfk/jfk-in-history/cuban-missile-crisis"
+    },
+    {
+     "t": "Cuban missile crisis | Britannica",
+     "u": "https://www.britannica.com/event/Cuban-missile-crisis"
     }
    ]
   },
@@ -2180,10 +2164,6 @@
     {
      "t": "Christopher Columbus | Britannica",
      "u": "https://www.britannica.com/biography/Christopher-Columbus"
-    },
-    {
-     "t": "Christopher Columbus | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Christopher_Columbus"
     }
    ]
   },
@@ -2471,10 +2451,6 @@
     {
      "t": "Our history | ICRC",
      "u": "https://www.icrc.org/en/who-we-are/history"
-    },
-    {
-     "t": "Henry Dunant | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Henry_Dunant"
     }
    ]
   },
@@ -2738,10 +2714,6 @@
     {
      "t": "Orson Welles | Britannica",
      "u": "https://www.britannica.com/biography/Orson-Welles"
-    },
-    {
-     "t": "Orson Welles | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Orson_Welles"
     }
    ]
   },
@@ -2989,10 +2961,6 @@
     {
      "t": "Ninety-five Theses | Britannica",
      "u": "https://www.britannica.com/event/Ninety-five-Theses"
-    },
-    {
-     "t": "Ninety-five Theses | Wikipedia",
-     "u": "https://en.wikipedia.org/wiki/Ninety-five_Theses"
     }
    ]
   },
