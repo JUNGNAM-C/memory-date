@@ -879,8 +879,8 @@ function renderRecords(data){
     var ripG=sv('g',{class:'ripples'});
     [10,100,500,1000,2000,4000].forEach(function(v,ri){
       var rc=sv('circle',{cx:CX,cy:CY,r:rad(v).toFixed(1),class:'rip',fill:'none',opacity:0});
-      rc.style.stroke='var('+RC[actR]+')';rc.style.strokeWidth='2.2';rc.style.filter='drop-shadow(0 0 4px var('+RC[actR]+'))';
-      rc.appendChild(sv('animate',{attributeName:'opacity',values:'0;.95;.15;0',keyTimes:'0;.18;.6;1',dur:'7s',begin:(ri*.9).toFixed(1)+'s',repeatCount:'indefinite'}));
+      rc.style.stroke='var('+RC[actR]+')';rc.style.strokeWidth='2.2';rc.style.filter='drop-shadow(0 0 2px var('+RC[actR]+'))';
+      rc.appendChild(sv('animate',{attributeName:'opacity',values:'0;.48;.08;0',keyTimes:'0;.18;.6;1',dur:'7s',begin:(ri*.9).toFixed(1)+'s',repeatCount:'indefinite'}));
       ripG.appendChild(rc);
     });
     svg.appendChild(ripG);
@@ -1196,7 +1196,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v70 · 10.22 16:45 업데이트';
+var BUILD='v71 · 10.22 17:00 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
