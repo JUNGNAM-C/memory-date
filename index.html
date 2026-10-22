@@ -266,19 +266,19 @@ button.od:hover{transform:scale(1.3)}
 .ov{background:linear-gradient(rgba(91,192,235,.07) 1px,transparent 1px) 0 0/26px 26px,linear-gradient(90deg,rgba(91,192,235,.07) 1px,transparent 1px) 0 0/26px 26px,radial-gradient(circle at 50% 46%,#173250 0%,#112640 55%,#0b1a2e 100%);border:2px solid var(--brand);padding:0;color:#D7ECF7;--r0:#FF6A4A;--r1:#F4C95D;--r2:#5BC0EB;--r3:#4FD6A0;--r4:#A98BFF;--r5:#7DE8E0;--r6:#C5D3DE}
 .ov-h{padding:10px 14px 0;color:#9FC4DA;font-size:.76rem}
 .ov svg{display:block}
-.orbit{display:block;width:100%;height:auto;max-width:680px;margin:0 auto;overflow:visible;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
+.orbit{display:block;width:84%;height:auto;max-width:560px;margin:0 auto;overflow:visible;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}
 .orbit:active{cursor:grabbing}
 .orbit .plate{fill:rgba(6,20,36,.72);stroke:none}
 .orbit .worldmap{fill:none;stroke:#4A9CC8;stroke-width:2.3;stroke-linecap:round;opacity:.42}
 .orbit .bezel{fill:none;stroke:rgba(111,211,232,.7);stroke-width:1}
 .orbit .bezel2{fill:none;stroke:#6FD3E8;stroke-width:2}
 .orbit .tk{stroke:rgba(111,211,232,.55);stroke-width:.6}
-.orbit .tkb{stroke:rgba(111,211,232,.95);stroke-width:1}
+.orbit .tkm{stroke:rgba(111,211,232,.8);stroke-width:.8}
+.orbit .tkb{stroke:rgba(111,211,232,.95);stroke-width:1.2}
 .orbit .deg{font-size:7.5px;font-weight:700;fill:#9BE3F2;letter-spacing:.04em}
 .orbit .cross{stroke:rgba(111,211,232,.22);stroke-width:.7}
 .orbit .cross1{stroke:rgba(111,211,232,.45)}
 .orbit .ring{fill:none;stroke:rgba(111,211,232,.32);stroke-width:.8}
-.orbit .ringo{stroke:rgba(111,211,232,.8);stroke-width:1.2}
 .orbit .ringl{font-size:7px;font-weight:700;fill:rgba(190,235,248,.75);paint-order:stroke;stroke:#08182a;stroke-width:3px;pointer-events:none}
 .orbit .sweep path{fill:#6FD3E8}
 .orbit .sweepline{stroke:#BFF3FF;stroke-width:1.4;opacity:.9}
@@ -806,7 +806,7 @@ function renderRecords(data){
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var defs=sv('defs');var cp=sv('clipPath',{id:'rclip'});cp.appendChild(sv('circle',{cx:CX,cy:CY,r:RMAX+4}));defs.appendChild(cp);svg.appendChild(defs);
   /* 레이더 판 */
-  svg.appendChild(sv('circle',{cx:CX,cy:CY,r:195,class:'plate'}));
+  svg.appendChild(sv('circle',{cx:CX,cy:CY,r:186,class:'plate'}));
   /* 점으로 된 세계지도 */
   var mapPath='',bin=atob(MAPB64),MW=320,MH=192,MX=CX-MW/2,MY=CY-MH/2,k0=0;
   for(var mr=0;mr<MAPR;mr++){for(var mc=0;mc<MAPC;mc++){
@@ -814,11 +814,14 @@ function renderRecords(data){
   }}
   var mp=sv('path',{d:mapPath,class:'worldmap','clip-path':'url(#rclip)'});svg.appendChild(mp);
   /* 눈금과 십자선 */
-  svg.appendChild(sv('circle',{cx:CX,cy:CY,r:177,class:'bezel'}));
-  svg.appendChild(sv('circle',{cx:CX,cy:CY,r:195,class:'bezel2'}));
+  /* 바깥 테두리 한 줄 + 안쪽으로 난 눈금 */
+  svg.appendChild(sv('circle',{cx:CX,cy:CY,r:186,class:'bezel2'}));
+  for(var dg=0;dg<360;dg+=2){
+    var tl=dg%30===0?11:(dg%10===0?7.5:4),q1=pol(186,dg-90),q2=pol(186-tl,dg-90);
+    svg.appendChild(sv('line',{x1:q1[0].toFixed(1),y1:q1[1].toFixed(1),x2:q2[0].toFixed(1),y2:q2[1].toFixed(1),class:dg%30===0?'tk tkb':(dg%10===0?'tk tkm':'tk')}));
+  }
   for(var dx2=0;dx2<360;dx2+=30){var q1=pol(RMAX+4,dx2-90);svg.appendChild(sv('line',{x1:CX,y1:CY,x2:q1[0].toFixed(1),y2:q1[1].toFixed(1),class:dx2%90===0?'cross cross1':'cross'}))}
   [10,100,500,1000,2000,4000].forEach(function(v){svg.appendChild(sv('circle',{cx:CX,cy:CY,r:rad(v).toFixed(1),class:'ring'}))});
-  svg.appendChild(sv('circle',{cx:CX,cy:CY,r:RMAX+4,class:'ring ringo'}));
   /* 스윕 */
   var sweepG=sv('g',{class:'sweep'});
   {
