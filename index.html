@@ -36,7 +36,7 @@
   --ray:#F5793A;
   --ray2:#FCE0D2;
   --sky1:#E5501B;--sky2:#F8861F;--sky3:#FFB340;--cloudc:#FFC45E;--sunc:#FFC233;
-  --sea:#1A88C9;
+  --sea:#1B2A63;
   --tint:#FDEBE2;
   --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --gungseo:"Gungsuh","궁서","궁서체","GungsuhChe","GungSeo","Noto Serif KR","Batang",serif;
@@ -96,13 +96,13 @@ button:hover{border-color:var(--ink)}
 }
 .cloud{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:calc(var(--pw)/1.28*.4);display:block}
 .cloud path{fill:var(--paper)}
-.bird{position:absolute;height:auto;fill:none;stroke:var(--blue);stroke-width:2;stroke-linecap:round;pointer-events:none}
+.bird{position:absolute;height:auto;fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;pointer-events:none}
 .bird.b1{left:calc(50% - var(--pw)*.06);bottom:calc(var(--pw)/1.28*.2);width:calc(var(--pw)*.065)}
 .bird.b2{left:calc(50% + var(--pw)*.06);bottom:calc(var(--pw)/1.28*.13);width:calc(var(--pw)*.05)}
 .bird.b3{left:calc(50% + var(--pw)*.2);bottom:calc(var(--pw)/1.28*.18);width:calc(var(--pw)*.04)}
 .sea{
   display:grid;gap:0;padding:14px 8px;
-  background:repeating-linear-gradient(to bottom,var(--sea) 0 7px,rgba(255,255,255,.4) 7px 8px);
+  background:repeating-linear-gradient(to bottom,var(--sea) 0 7px,rgba(255,255,255,.3) 7px 8px);
 }
 .sl{position:absolute;left:14px;bottom:9px;z-index:1;color:var(--ink);font-weight:900;font-size:1.1rem;line-height:1;letter-spacing:.01em;font-variant-numeric:tabular-nums}
 .sr{left:auto;right:14px;font-size:.78rem;letter-spacing:0;bottom:10px}
@@ -356,7 +356,7 @@ button.od.sel{transform:scale(1.55);box-shadow:0 0 0 3px var(--ink);z-index:1}
 
 .band{
   color:#fff;padding:12px 16px 14px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 16px;
-  background:repeating-linear-gradient(to bottom,var(--sea) 0 7px,rgba(255,255,255,.4) 7px 8px);
+  background:repeating-linear-gradient(to bottom,var(--sea) 0 7px,rgba(255,255,255,.3) 7px 8px);
   text-shadow:0 1px 0 rgba(0,0,0,.25);
 }
 .band .bn{font-family:var(--gungseo);font-size:2.2rem;line-height:1.1}
