@@ -317,7 +317,8 @@ button.od:hover{transform:scale(1.3)}
 .orbit .osun circle{fill:#FFC233;stroke:#FFE9A8;stroke-width:2;filter:drop-shadow(0 0 8px rgba(255,194,51,.55))}
 .orbit .osun text{pointer-events:none}
 .orbit .osun .o1{font-size:8.5px;font-weight:900;fill:#2B1D00}
-.orbit .osun .o2{font-size:7.5px;font-weight:800;fill:#5A3A00}
+.orbit .osun .o2{font-size:7.5px;font-weight:900;fill:#2B1D00;font-variant-numeric:tabular-nums}
+.orbit .osun .o1{font-variant-numeric:tabular-nums}
 .orbit .hud{opacity:.9}
 .orbit .hud2{fill:#FFC233;opacity:.75}
 .orbit .hudt{font-size:8.5px;font-weight:800;fill:#FFE9A8}
@@ -952,10 +953,9 @@ function renderRecords(data){
   }else{
     var sun=sv('g',{class:'osun'});
     sun.appendChild(sv('circle',{cx:CX,cy:CY,r:RIN-6}));
-    var t1='오늘',t2=String(TY);
-    var o1=sv('text',{x:CX,y:CY-2,'text-anchor':'middle',class:'o1'},t1);if(t1.length>6)o1.style.fontSize='7px';
-    var o2=sv('text',{x:CX,y:CY+9,'text-anchor':'middle',class:'o2'},t2);if(t2.length>5)o2.style.fontSize='6.5px';
-    sun.appendChild(o1);sun.appendChild(o2);
+    [[String(TY)+'.',CY-7,'o2'],[TM+'.',CY+2,'o1'],[String(TD)+'.',CY+11,'o1']].forEach(function(r){
+      sun.appendChild(sv('text',{x:CX,y:r[1],'text-anchor':'middle',class:r[2]},r[0]));
+    });
     svg.appendChild(sun);
   }
   /* 돌려 보기: 드래그 + 관성 */
