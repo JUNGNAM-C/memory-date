@@ -1,5 +1,5 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="color-scheme" content="only light">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png?v=3">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png?v=3">
@@ -58,7 +58,8 @@ h1,h2,h3,h4,p{margin:0}
 .sun{color:var(--sun)}
 .sat{color:var(--blue)}
 
-button,select{
+html,body{touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,select{touch-action:manipulation;
   font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);
   border-radius:6px;min-height:40px;padding:0 14px;
 }
@@ -342,7 +343,7 @@ button.od:hover{transform:scale(1.3)}
 .lh .n{font-size:.8rem;color:var(--ink2);margin-right:auto}
 .lh button{min-height:34px;min-width:34px;padding:0;border:1px solid var(--rc);color:var(--rc);background:transparent;border-radius:50%;font-weight:900}
 .lh button:hover{background:var(--tint)}
-.ls{display:flex;overflow-x:auto;padding:0 0 10px;margin:0 -2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
+.ls{touch-action:pan-x;overflow-y:hidden;overscroll-behavior:contain;contain:layout paint;display:flex;overflow-x:auto;padding:0 0 10px;margin:0 -2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
 .ls::before,.ls::after{content:"";flex:0 0 calc(50% - min(19rem,86%)/2)}
 button.lc{position:relative;flex:none;scroll-snap-align:center;scroll-snap-stop:always;width:min(19rem,86%);text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:58px 6px 46px 6px;display:block}
 button.lc::before{content:"";position:absolute;left:0;right:0;top:43px;height:3px;background:var(--rc);opacity:.45}
@@ -1074,13 +1075,9 @@ function renderRecords(data){
   var lane=el('section','lane');lane.style.setProperty('--rc','var('+rc+')');
   var lh=el('div','lh');
   lh.appendChild(el('b',null,name==='전체'?'전체 타임라인':name+' 타임라인'));
-  lh.appendChild(el('span','n',items.length+'건 · 옆으로 밀어서 보기'));
+  lh.appendChild(el('span','n',items.length+'건'));
   var st=el('div','ls');st.tabIndex=0;st.setAttribute('aria-label',name+' 타임라인');
-  var pv=el('button',null,'‹');pv.type='button';pv.setAttribute('aria-label','이전');
-  var nx=el('button',null,'›');nx.type='button';nx.setAttribute('aria-label','다음');
-  pv.addEventListener('click',function(){st.scrollBy({left:-Math.min(st.clientWidth*.86,304),behavior:'smooth'})});
-  nx.addEventListener('click',function(){st.scrollBy({left:Math.min(st.clientWidth*.86,304),behavior:'smooth'})});
-  lh.appendChild(pv);lh.appendChild(nx);lane.appendChild(lh);
+  lane.appendChild(lh);
   var lastEra=-9;
   items.forEach(function(e){
     var c=el('button','lc');c.type='button';c.style.setProperty('--rc','var('+RC[e.r]+')');
@@ -1132,6 +1129,8 @@ function renderRecords(data){
   $('count').textContent=items.length+'건';
 }
 
+document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
+document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
 function renderNotes(data){
   var sec=$('notesSec'),box=$('notes');box.textContent='';
   if(!data||!data.notes.length){sec.hidden=true;return}
