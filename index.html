@@ -346,7 +346,9 @@ button.od:hover{transform:scale(1.3)}
 button.lc{position:relative;flex:none;scroll-snap-align:center;scroll-snap-stop:always;width:min(19rem,86%);text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:58px 6px 46px 6px;display:block}
 button.lc::before{content:"";position:absolute;left:0;right:0;top:43px;height:3px;background:var(--rc);opacity:.45}
 button.lc::after{content:"";position:absolute;left:50%;top:37px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:var(--rc);border:3px solid var(--bg)}
-.lcb{transform:translateY(calc(var(--o,0)*38px)) scale(calc(1 - var(--o,0)*.06));opacity:calc(1 - var(--o,0)*.45);transform-origin:50% 100%;will-change:transform;display:block;border:1px solid var(--line);border-top:3px solid var(--rc);background:var(--paper);padding:8px 10px 10px;height:100%}
+.hp-head.go{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px}
+.hp-head.go::after{content:" ›";color:var(--rc,#FFC233)}
+.lcb{transform:translate(calc(var(--s,0)*-1*var(--o,0)*88px),calc(var(--o,0)*44px)) scale(calc(1 - var(--o,0)*.08));opacity:calc(1 - var(--o,0)*.25);transform-origin:50% 100%;will-change:transform;display:block;border:1px solid var(--line);border-top:3px solid var(--rc);background:var(--paper);padding:8px 10px 10px;height:100%}
 button.lc:hover .lcb{background:var(--tint)}
 .lce{position:absolute;left:8px;top:2px;font-size:.66rem;font-weight:900;color:var(--rc);letter-spacing:.02em}
 .lcy{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;align-items:center;font-weight:900;font-size:1.3rem;font-variant-numeric:tabular-nums;line-height:1.15;pointer-events:none}
@@ -1037,6 +1039,14 @@ function renderRecords(data){
   if(selE){
     top.textContent='TARGET LOCKED · '+(agoText(selE.y)?agoText(selE.y)+' · ':'')+yrTxt(selE.y)+'년 · '+selE.r;
     hh.textContent=selE.head;
+    if(cards[keyOf2(selE)]||true){
+      hh.classList.add('go');hh.tabIndex=0;hh.setAttribute('role','button');
+      hh.title='누르면 전체 타임라인의 해당 카드로 이동합니다';
+      var goTl=function(){var c=cards[keyOf2(selE)];if(!c)return;S.sel=keyOf2(selE);mark();
+        var ln=c.closest('.lane');if(ln&&ln.scrollIntoView)ln.scrollIntoView({behavior:'smooth',block:'center'});center(S.sel,true)};
+      hh.addEventListener('click',goTl);
+      hh.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();goTl()}});
+    }
     var full=String(selE.body||'');hb.textContent=full;
     if(!reduce&&full){
       hb.textContent='';hb.classList.add('typing');var ti=0;
@@ -1096,7 +1106,7 @@ function renderRecords(data){
     rafT=0;var w=st.clientWidth,mid=st.scrollLeft+w/2;
     Object.keys(cards).forEach(function(k){var c=cards[k];if(c.parentNode!==st)return;
       var cx=c.offsetLeft+c.offsetWidth/2,o=Math.min(1,Math.abs(cx-mid)/(c.offsetWidth*1.1));
-      c.style.setProperty('--o',o.toFixed(3));});
+      c.style.setProperty('--o',o.toFixed(3));c.style.setProperty('--s',cx<mid?-1:1);c.style.zIndex=String(100-Math.round(o*90));});
   }
   st.addEventListener('scroll',function(){if(!rafT)rafT=requestAnimationFrame(fan)},{passive:true});
   window.addEventListener('resize',fan);
