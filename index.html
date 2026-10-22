@@ -422,6 +422,7 @@ var MON=['Jan.','Feb.','Mar.','Apr.','May','Jun.','Jul.','Aug.','Sep.','Oct.','N
 var MEN3=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 var STEM='甲乙丙丁戊己庚辛壬癸',BRANCH='子丑寅卯辰巳午未申酉戌亥';
 var NOW=new Date();
+function agoText(y){var n=NOW.getFullYear()-y-(y<0?1:0);if(!(n>0))return '';return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',')+'년 전'}
 var TY=NOW.getFullYear(),TM=NOW.getMonth()+1,TD=NOW.getDate();
 
 var LF=null;
@@ -643,7 +644,7 @@ function renderScene(data){
   $('stat').textContent=S.y+'년의 '+doy+'번째 날 · 남은 날 '+(total-doy)+'일';
   if(data){
     var f=data.featured;
-    $('fyear').textContent=yearText(f.y)+' · '+f.r;
+    $('fyear').textContent=(agoText(f.y)?agoText(f.y)+' · ':'')+yearText(f.y)+' · '+f.r;
     $('fhead').textContent=f.head;
     $('fbody').textContent=f.body;
     var sb=$('fsigBox'),fr=$('frefs');
@@ -827,7 +828,8 @@ function renderNotes(data){
   data.notes.forEach(function(it,i){
     var c=el('article','ncard');
     if(it.w){var wd=el('div','nw'),pp=it.w.split(' · ');
-      if(pp.length>1){wd.appendChild(el('b',null,pp[0]));wd.appendChild(el('span',null,pp.slice(1).join(' · ')))}else wd.appendChild(el('span',null,it.w));
+      var ym=/^\d{1,4}/.exec(pp[0]),ag=ym?agoText(parseInt(ym[0],10)):'';
+      if(pp.length>1){wd.appendChild(el('b',null,(ag?ag+' · ':'')+pp[0]));wd.appendChild(el('span',null,pp.slice(1).join(' · ')))}else wd.appendChild(el('span',null,it.w));
       c.appendChild(wd)}
     c.appendChild(el('h3','nti',it.head));
     c.appendChild(el('p','nbo',it.body));
