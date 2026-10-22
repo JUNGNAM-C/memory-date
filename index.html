@@ -874,9 +874,10 @@ function renderRecords(data){
     var XL=40,XR=360,n0=rowList.length;
     rowList.forEach(function(e,i){rowPos[keyOf2(e)]=[n0>1?XL+(XR-XL)*i/(n0-1):CX,CY]});
   }
-  if(regSel&&!reduce){
+  var selR=null;list2.forEach(function(e){if(keyOf2(e)===S.sel)selR=e.r});var actR=regSel?S.region:selR;
+  if(actR&&!reduce){
     var rg=sv('radialGradient',{id:'ripgrad',cx:'50%',cy:'50%',r:'50%'});
-    [['0',0],['22',.03],['50',.12],['78',.3],['100',.44]].forEach(function(st){var sp=sv('stop',{offset:st[0]+'%'});sp.style.stopColor='var('+RC[S.region]+')';sp.style.stopOpacity=st[1];rg.appendChild(sp)});
+    [['0',0],['22',.03],['50',.12],['78',.3],['100',.44]].forEach(function(st){var sp=sv('stop',{offset:st[0]+'%'});sp.style.stopColor='var('+RC[actR]+')';sp.style.stopOpacity=st[1];rg.appendChild(sp)});
     defs.appendChild(rg);
     var ripG=sv('g',{class:'ripples'});
     for(var ri=0;ri<2;ri++){
@@ -926,7 +927,7 @@ function renderRecords(data){
     g.appendChild(sv('circle',{r:10,fill:'transparent'}));
     var shape=sv('circle',{r:isF?5.5:3.5});
     shape.setAttribute('class','odc'+(isF?' fst':''));
-    if(!isF)shape.style.fill=(regSel&&r===S.region)?'var('+RC[r]+')':'#fff';
+    if(!isF)shape.style.fill=(actR&&r===actR)?'var('+RC[r]+')':'#fff';
     g.appendChild(shape);
     if(regSel&&r!==S.region)g.classList.add('dim');
     if(regSel&&r===S.region){
@@ -941,7 +942,7 @@ function renderRecords(data){
     g.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();moved=false;pick()}});
     (dots[k]=dots[k]||[]).push(g);
     (inRow?rowG:gal).appendChild(g);
-    var bo={isF:isF,col:regSel&&r===S.region,c:getComputedStyle(document.documentElement).getPropertyValue(RC[r]).trim()||'#ffc233',shape:shape,ping:ping,p:pos[k],row:inRow?rowPos[k]:null,lit:inRow};blips.push(bo);blipBy[k]=bo;
+    var bo={isF:isF,col:!!(actR&&r===actR),c:getComputedStyle(document.documentElement).getPropertyValue(RC[r]).trim()||'#ffc233',shape:shape,ping:ping,p:pos[k],row:inRow?rowPos[k]:null,lit:inRow};blips.push(bo);blipBy[k]=bo;
   });
   S.lastLay=lay;S.lastRegion=S.region;
   svg.appendChild(gal);
@@ -1199,7 +1200,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v68 · 10.22 16:15 업데이트';
+var BUILD='v69 · 10.22 16:30 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
