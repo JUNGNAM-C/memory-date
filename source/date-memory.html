@@ -1044,7 +1044,7 @@ function renderRecords(data){
   function sel2pt(){var bo=S.sel&&blipBy[S.sel];return bo?(bo.row||rotPt(bo.p,S.rot||0)):null}
   if(reduce){var rp0=sel2pt();if(rp0){sweepG.style.display='';sweepG.setAttribute('transform','rotate('+head(rp0).toFixed(1)+' '+CX+' '+CY+')');sweepG.classList.add('lock')}}
   else if(svg.animate){
-    var tprev=performance.now(),PER=11000,hS=(typeof S.sweepH==='number')?S.sweepH:0,locked=false;
+    var tprev=performance.now(),PER=60000,hS=(typeof S.sweepH==='number')?S.sweepH:0,locked=false;
     function frame(now){
       if(!svg.isConnected)return;
       var dt=Math.min(now-tprev,64);tprev=now;
