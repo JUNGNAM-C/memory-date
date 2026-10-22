@@ -1240,13 +1240,14 @@ function renderNotes(data){
   sync();
 }
 
+var BUILD='v63 · 10.22 14:32 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
-  if(!data){f.textContent=base;return}
+  if(!data){f.textContent=base+' ('+BUILD+')';return}
   f.textContent=(SEED[keyOf(S.m,S.d)]
     ?'이 날의 기억은 널리 알려진 역사 지식을 바탕으로 정리했습니다. 자료마다 날짜가 다른 항목은 본문에 적어 두었습니다. '
-    :'이 날의 기억은 Claude가 작성했습니다. 연도와 수치는 다른 자료로 한 번 더 확인해 주세요. ')+base;
+    :'이 날의 기억은 Claude가 작성했습니다. 연도와 수치는 다른 자료로 한 번 더 확인해 주세요. ')+base+' ('+BUILD+')';
 }
 
 function show(){
