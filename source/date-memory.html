@@ -889,7 +889,12 @@ function renderRecords(data){
   var CX=200,CY=200,RMAX=160,RIN=26,GA=137.508,VB=-2,VS=404;
   var MAPB64='AAAAHwfwAAAAAAAAAAAAGf//gBgQAYAAAAAAADv/+AIAAAAAAAAABqgH/4AAAwH8DAAAAcvoH/AAAED/6EAAIAeXwf8ABARf/99AD//o5g/AAfgd/////v///GnxQD6//////wf//7MOCAf///////D///DAwAHv/////+wGH/8OAAAO/////8oAAH/4eAAI7/////BgAAP/78AAT/////8GAAA//vwAFf/////8QAAB//6gAH//////wAAAH//QAAf//////AAAAP/+gAA73v///0AAAB//wAAO3Cf//8QAAAH/+AAAy79//+wAAAAP/4AADE/3//5AAAAA//gAALgf///lgAAAB/8AAA+A////IAAAAB/gAAH+////8AAAAAPhAAAf/+///wAAAAAOEAAD/+8//+AAAAAB4AAAP/98f/8AAAAABkgAB//3x8+AAAAAAGQgAH//fDjoAAAAAAGAAAf/+4OPEAAAAAAGAAB///AQcAAAAAAAIgAH//wBBQAAAAAAAHgAP//wEFAAAAAAAA/AAf//AIAIAAAAAAB/AAD/4AAiAAAAAAAP8AAH/gAGYAAAAAAA/wAAf8AALkAAAAAAD/wAB/gAAlCAAAAAAf/wAH+AAAAMAAAAAA//AAP4AACAYAAAAAD/8AA/gAAAgCAAAAAH/wAD+AAAAEAAAAAAf+AAf5AAADQAAAAAA/4AB/sAAA9AAAAAAD/gAH8wAAD+AAAAAAH+AAPyAAA/4AAAAAA/gAA/IAAD/wAAAAAD+AAD4AAAP/gAAAAAPwAAPgAAA/+AAAAAA/AAAcAAAD/4AAAAAD4AABwAAAMfAAAAAAPAAAAAAAAA8AAAAAA8AAAAAAAABgEAAAADgAAAAAAAAAAAAAAAcAAAAAAAAAIAAAAABwAAAAAAAAAAwAAAAHAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAA',MAPC=100,MAPR=60;
   function agoY(y){return Math.max(0,TY-y-(y<0?1:0))}
-  function rad(ago){return RIN+(RMAX-RIN)*Math.log(1+ago/20)/Math.log(1+4400/20)}
+  var RAN=[[0,0],[10,.2],[100,.5],[500,.77],[1000,.86],[2000,.93],[4400,1]];
+  function rad(ago){
+    var a=Math.max(0,Math.min(ago,4400)),i=1;while(i<RAN.length-1&&a>RAN[i][0])i++;
+    var p0=RAN[i-1],p1=RAN[i],L=function(v){return Math.log(1+v/20)},t=(L(a)-L(p0[0]))/(L(p1[0])-L(p0[0]));
+    return RIN+(RMAX-RIN)*(p0[1]+(p1[1]-p0[1])*t);
+  }
   function pol(r,deg){var t=deg*Math.PI/180;return [CX+r*Math.cos(t),CY+r*Math.sin(t)]}
   function rotPt(p,deg){var t=deg*Math.PI/180,dx=p[0]-CX,dy=p[1]-CY;return [CX+dx*Math.cos(t)-dy*Math.sin(t),CY+dx*Math.sin(t)+dy*Math.cos(t)]}
   function wrap180(d){return ((d%360)+540)%360-180}
@@ -1306,7 +1311,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v75 · 10.22 18:15 업데이트';
+var BUILD='v76 · 10.22 18:30 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
