@@ -26,9 +26,10 @@
   --on-sun:#FFFFFF;
   --blue:#1163B3;
   --on-blue:#FFFFFF;
-  --brand:#1279BE;
-  --on-brand:#FFFFFF;
-  --banner:#1B9BDB;
+  --brand:#FFC233;
+  --on-brand:#2B1D00;
+  --brand-text:#8A5A00;
+  --banner:#FFC233;
   --maroon:#9E1F3A;
   --metal:#8F9CA6;
   --metal2:#BAC4CB;
@@ -170,8 +171,8 @@ button.day[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);bo
 button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:var(--on-brand)}
 
 .scene{
-  background:var(--paper);border:1px solid var(--line);border-top:6px solid var(--banner);
-  padding:18px 18px 20px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;
+  background:var(--paper);border:2px solid var(--brand);
+  padding:20px 18px 22px;display:grid;grid-template-columns:minmax(0,1fr);gap:22px;
 }
 .sd{display:grid;justify-items:center;align-content:start;min-width:6.5rem;text-align:center}
 .sd-m{font-weight:900;font-size:1rem;letter-spacing:.12em}
@@ -180,26 +181,26 @@ button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:va
 .sd-l{font-size:.78rem;color:var(--ink2);font-variant-numeric:tabular-nums}
 .sc{display:grid;gap:6px;align-content:start}
 .eyebrow{display:inline-block;justify-self:start;background:var(--brand);color:var(--on-brand);font-weight:900;font-size:.78rem;letter-spacing:.2em;padding:2px 10px 2px 12px}
-.fyear{font-weight:900;color:var(--sun);font-size:.95rem}
+.fyear{font-weight:900}
 .fhead{font-weight:900;font-size:clamp(1.2rem,3.6vw,1.55rem);line-height:1.4;text-wrap:balance}
 .fbody{max-width:38em;white-space:pre-line}
 .fsig{max-width:38em;margin-top:10px;padding:12px 14px;border-left:4px solid var(--brand);background:var(--tint)}
-.fsig-h{font-weight:900;font-size:.9rem;color:var(--brand);letter-spacing:.06em;margin-bottom:4px}
+.fsig-h{font-weight:900;font-size:.9rem;color:var(--brand-text);letter-spacing:.06em;margin-bottom:4px}
 .fsig-b{font-size:.93rem;line-height:1.75}
 .frefs{display:flex;flex-direction:column;gap:2px;margin-top:8px;font-size:.84rem}
 .frefs .rh{font-weight:700;color:var(--ink2);font-size:.78rem;letter-spacing:.04em;margin-top:2px}
-.frefs a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:3px 0;overflow-wrap:anywhere}
+.frefs a{color:var(--brand-text);font-weight:700;text-decoration:underline;text-underline-offset:3px;padding:3px 0;overflow-wrap:anywhere}
 .stat{color:var(--ink2);font-size:.82rem;font-variant-numeric:tabular-nums;margin-top:4px}
 .tear{animation:tear .22s ease-out}
 @keyframes tear{from{opacity:.45;transform:translateY(-6px) rotate(-.4deg)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.tear{animation:none}}
 
-.rec-top{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;margin-bottom:12px}
-.rec-top h3{font-weight:900;font-size:1.25rem}
-.rec-top .cnt{color:var(--ink2);font-size:.85rem;font-variant-numeric:tabular-nums}
+.nh,.rec-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;background:var(--brand);color:var(--on-brand);padding:9px 16px}
+.nh b,.rec-top h3{font-weight:900;font-size:1.1rem;margin:0}
+.rec-top .cnt,.nh .fyear{color:var(--on-brand);font-size:.9rem;font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
 .chips{display:flex;flex-wrap:nowrap;gap:3px;margin:0;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:1 1 auto;min-width:0;border-radius:999px;min-height:34px;padding:0 6px;font-size:.74rem;letter-spacing:-.03em;white-space:nowrap;font-weight:700;color:var(--brand);border:1px solid var(--brand);background:transparent}
+.chip{flex:1 1 auto;min-width:0;border-radius:999px;min-height:34px;padding:0 6px;font-size:.74rem;letter-spacing:-.03em;white-space:nowrap;font-weight:700;color:var(--brand-text);border:1px solid var(--brand);background:transparent}
 @media (max-width:380px){.chip{font-size:.68rem;padding:0 4px}}
 .chip:hover{border-color:var(--brand);background:var(--tint)}
 .chip[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
@@ -224,8 +225,6 @@ button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:va
 
 /* ---- 인문학 카드 ---- */
 #notesSec{margin-top:6px}
-.nh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;background:var(--brand);color:var(--on-brand);padding:9px 16px}
-.nh b{font-weight:900;font-size:1.1rem}
 .nct{font-size:.9rem;font-weight:700;font-variant-numeric:tabular-nums}
 .nw{display:flex;flex-direction:column;gap:2px;padding:8px 12px;background:var(--tint);border-left:4px solid var(--sun)}
 .nw b{font-size:.95rem;color:var(--sun);font-variant-numeric:tabular-nums}
@@ -239,7 +238,7 @@ button.day[aria-pressed="true"] .dl,button.day[aria-pressed="true"] .dh{color:va
 .nbo{margin:0;word-break:keep-all;font-size:1.05rem;line-height:1.75}
 .nxt{margin:0;word-break:keep-all;font-size:1rem;line-height:1.75;color:var(--ink2);padding-top:14px;border-top:1px dashed var(--line)}
 .nq{margin-top:auto;background:var(--tint);border-left:4px solid var(--brand);padding:12px 14px}
-.nq b{display:block;font-size:.8rem;color:var(--brand);margin-bottom:4px}
+.nq b{display:block;font-size:.8rem;color:var(--brand-text);margin-bottom:4px}
 .nq p{margin:0;font-size:1rem;line-height:1.6;font-weight:700}
 .ndots{display:flex;justify-content:center;gap:10px;margin-top:10px}
 .ndot{width:10px;height:10px;min-height:0;padding:0;border-radius:50%;border:2px solid var(--brand);background:transparent;position:relative}
@@ -377,10 +376,9 @@ button.od.sel{transform:scale(1.55);box-shadow:0 0 0 3px var(--ink);z-index:1}
     <div class="grid" id="grid"></div>
   </section>
 
+  <div class="nh"><b>이날의 한 장면</b><span class="fyear" id="fyear"></span></div>
   <section class="scene" id="scene" aria-live="polite">
     <div class="sc">
-      <div class="eyebrow">이날의 한 장면</div>
-      <div class="fyear" id="fyear"></div>
       <h2 class="fhead" id="fhead"></h2>
       <p class="fbody" id="fbody"></p>
       <div class="fsig" id="fsigBox" hidden>
@@ -769,7 +767,7 @@ function renderRecords(data){
   /* 가로 타임라인 한 줄: 전체 탭은 모든 사건, 지역 탭은 그 지역만 */
   var lanes=el('div','lanes');
   var items=data.events.filter(function(e){return S.region==='전체'||e.r===S.region});
-  var name=S.region, rc=S.region==='전체'?'--brand':RC[S.region];
+  var name=S.region, rc=S.region==='전체'?'--brand-text':RC[S.region];
   var lane=el('section','lane');lane.style.setProperty('--rc','var('+rc+')');
   var lh=el('div','lh');
   lh.appendChild(el('b',null,name==='전체'?'전체 타임라인':name+' 타임라인'));
