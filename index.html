@@ -335,7 +335,7 @@ button.od:hover{transform:scale(1.3)}
 .hp-body{font-size:.88rem;line-height:1.7;color:#F1E6C8;word-break:keep-all}
 .hp-body.typing::after{content:"▌";margin-left:2px;color:#FFC233;animation:blink .7s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
-.es{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;align-items:flex-start;padding:2px 2px 12px;margin:0 -2px;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.es{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;align-items:flex-start;padding:2px 0 12px;margin:0;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .ec{flex:none;width:100%;scroll-snap-align:start;background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.08)}
 .eranow{text-align:center;font-size:.78rem;font-weight:800;color:#FFE9A8;margin-top:4px;letter-spacing:.04em}
 .ech{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#FFC233;color:#2a1f10;font-weight:900;font-size:.95rem}
@@ -798,7 +798,7 @@ function renderRecords(data){
   function center(k,smooth){
     var c=cards[k];if(!c)return;
     var col=c.parentNode,st=col.parentNode;
-    st.scrollTo({left:Math.max(0,col.offsetLeft-st.offsetLeft-2),behavior:smooth?'smooth':'auto'});
+    st.scrollTo({left:Math.max(0,col.offsetLeft-st.offsetLeft),behavior:smooth?'smooth':'auto'});
   }
 
   /* 한눈에 보기: 레이더 — 가운데가 오늘, 멀수록 오래된 사건, 점 색이 지역. 스윕이 지나가면 사건이 탐지되어 깜박임. 지역을 고르면 연도순 일렬 */
@@ -1138,7 +1138,7 @@ function renderRecords(data){
   var eraCols=Array.prototype.slice.call(st.children),pg=el('div','ndots');pg.style.marginTop='8px';
   eraCols.forEach(function(col,i){
     var b=el('button','ndot');b.type='button';b.setAttribute('aria-label',col.firstChild.firstChild.textContent+' 시대');b.title=col.firstChild.firstChild.textContent;
-    b.addEventListener('click',function(){st.scrollTo({left:col.offsetLeft-st.offsetLeft-2,behavior:'smooth'})});pg.appendChild(b);
+    b.addEventListener('click',function(){st.scrollTo({left:col.offsetLeft-st.offsetLeft,behavior:'smooth'})});pg.appendChild(b);
   });
   function syncDots(){
     var w=st.clientWidth+12,i=Math.max(0,Math.min(eraCols.length-1,Math.round(st.scrollLeft/w)));
@@ -1148,7 +1148,7 @@ function renderRecords(data){
   var eraNow=el('div','eranow','');
   st.addEventListener('scroll',function(){S.esLeft=st.scrollLeft;requestAnimationFrame(syncDots)},{passive:true});
   lane.appendChild(st);lane.appendChild(pg);lane.appendChild(eraNow);lanes.appendChild(lane);
-  lanes.style.margin='4px 2px 6px';ov.appendChild(lanes);
+  lanes.style.margin='4px 12px 6px';ov.appendChild(lanes);
   if(typeof S.esLeft==='number')st.scrollLeft=S.esLeft;
   syncDots();
   if(!cards[S.sel])S.sel='';
@@ -1206,7 +1206,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v79 · 10.22 19:30 업데이트';
+var BUILD='v80 · 10.22 19:45 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
