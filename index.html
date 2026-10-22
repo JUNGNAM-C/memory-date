@@ -343,10 +343,10 @@ button.od:hover{transform:scale(1.3)}
 .lh button:hover{background:var(--tint)}
 .ls{display:flex;overflow-x:auto;padding:0 0 10px;margin:0 -2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
 .ls::before,.ls::after{content:"";flex:0 0 calc(50% - min(19rem,86%)/2)}
-button.lc{position:relative;flex:none;scroll-snap-align:center;scroll-snap-stop:always;width:min(19rem,86%);text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:58px 6px 8px 6px;display:block}
+button.lc{position:relative;flex:none;scroll-snap-align:center;scroll-snap-stop:always;width:min(19rem,86%);text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:58px 6px 46px 6px;display:block}
 button.lc::before{content:"";position:absolute;left:0;right:0;top:43px;height:3px;background:var(--rc);opacity:.45}
 button.lc::after{content:"";position:absolute;left:50%;top:37px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:var(--rc);border:3px solid var(--bg)}
-.lcb{display:block;border:1px solid var(--line);border-top:3px solid var(--rc);background:var(--paper);padding:8px 10px 10px;height:100%}
+.lcb{transform:translateY(calc(var(--o,0)*38px)) scale(calc(1 - var(--o,0)*.06));opacity:calc(1 - var(--o,0)*.45);transform-origin:50% 100%;will-change:transform;display:block;border:1px solid var(--line);border-top:3px solid var(--rc);background:var(--paper);padding:8px 10px 10px;height:100%}
 button.lc:hover .lcb{background:var(--tint)}
 .lce{position:absolute;left:8px;top:2px;font-size:.66rem;font-weight:900;color:var(--rc);letter-spacing:.02em}
 .lcy{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;align-items:center;font-weight:900;font-size:1.3rem;font-variant-numeric:tabular-nums;line-height:1.15;pointer-events:none}
@@ -1058,7 +1058,7 @@ function renderRecords(data){
 
   /* 가로 타임라인 한 줄: 전체 탭은 모든 사건, 지역 탭은 그 지역만 */
   var lanes=el('div','lanes');
-  var items=data.events.filter(function(e){return S.region==='전체'||e.r===S.region});
+  var items=data.events.filter(function(e){return S.region==='전체'||e.r===S.region}).slice().sort(function(a,b){return b.y-a.y});
   var name=S.region, rc=S.region==='전체'?'--brand-text':RC[S.region];
   var lane=el('section','lane');lane.style.setProperty('--rc','var('+rc+')');
   var lh=el('div','lh');
@@ -1091,8 +1091,18 @@ function renderRecords(data){
     cards[keyOf2(e)]=c;
     st.appendChild(c);
   });
+  var rafT=0;
+  function fan(){
+    rafT=0;var w=st.clientWidth,mid=st.scrollLeft+w/2;
+    Object.keys(cards).forEach(function(k){var c=cards[k];if(c.parentNode!==st)return;
+      var cx=c.offsetLeft+c.offsetWidth/2,o=Math.min(1,Math.abs(cx-mid)/(c.offsetWidth*1.1));
+      c.style.setProperty('--o',o.toFixed(3));});
+  }
+  st.addEventListener('scroll',function(){if(!rafT)rafT=requestAnimationFrame(fan)},{passive:true});
+  window.addEventListener('resize',fan);
   lane.appendChild(st);lanes.appendChild(lane);
   list.appendChild(lanes);
+  fan();setTimeout(fan,0);
   if(!cards[S.sel])S.sel='';
   mark();
   if(S.center&&S.sel){
