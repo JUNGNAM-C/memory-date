@@ -323,6 +323,18 @@ button.od:hover{transform:scale(1.3)}
 .hp-body{font-size:.88rem;line-height:1.7;color:#F1E6C8;word-break:keep-all}
 .hp-body.typing::after{content:"▌";margin-left:2px;color:#FFC233;animation:blink .7s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
+.es{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;align-items:flex-start;padding:2px 2px 12px;margin:0 -2px;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.ec{flex:none;width:min(21rem,88%);scroll-snap-align:start;background:var(--paper);border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.ech{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#FFC233;color:#2a1f10;font-weight:900;font-size:.95rem}
+.ech i{font-style:normal;font-weight:800;font-size:.8rem}
+button.er{display:grid;grid-template-columns:3.1rem minmax(0,1fr) auto;gap:8px;align-items:start;width:100%;text-align:left;background:transparent;color:var(--ink);border:0;border-top:1px solid var(--line);border-left:4px solid transparent;border-radius:0;font:inherit;min-height:0;padding:9px 10px 9px 8px;cursor:pointer}
+button.er:first-of-type{border-top:0}
+button.er:hover{background:var(--tint)}
+.ery{font-weight:900;font-size:.95rem;color:var(--ink);text-align:right;line-height:1.35;font-variant-numeric:tabular-nums}
+.erh{font-size:.9rem;line-height:1.45;word-break:keep-all}
+.err{font-size:.68rem;font-weight:900;color:var(--rc);border:1px solid var(--rc);border-radius:10px;padding:1px 7px;white-space:nowrap;margin-top:2px}
+button.er.sel{background:color-mix(in srgb,var(--rc) 14%,var(--paper));border-left-color:var(--rc)}
+button.er.sel .erh{font-weight:800}
 .lanes{display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
 .boxes{grid-template-columns:minmax(0,1fr)}
 .boxes>*{min-width:0}
@@ -333,33 +345,10 @@ button.od:hover{transform:scale(1.3)}
 .lh .n{font-size:.8rem;color:var(--ink2);margin-right:auto}
 .lh button{min-height:34px;min-width:34px;padding:0;border:1px solid var(--rc);color:var(--rc);background:transparent;border-radius:50%;font-weight:900}
 .lh button:hover{background:var(--tint)}
-.ls{touch-action:pan-x;overflow-y:hidden;overscroll-behavior:contain;contain:layout paint;display:flex;overflow-x:auto;padding:0 0 10px;margin:0 -2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
-.ls::before,.ls::after{content:"";flex:0 0 calc(50% - min(19rem,86%)/2)}
-button.lc{position:relative;flex:none;scroll-snap-align:center;width:var(--w,min(19rem,86%));text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:58px 6px 46px 6px;display:block}
-button.lc::before{content:"";position:absolute;left:0;right:0;top:43px;height:3px;background:var(--rc);opacity:.45}
-button.lc::after{content:"";position:absolute;left:50%;top:37px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:var(--rc);border:3px solid var(--bg)}
 .hp-head.go{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px}
 .hp-head.go::after{content:" ›";color:var(--rc,#FFC233)}
 
-.ls.sv button.lc{animation:lcz linear both;animation-timeline:view(inline);animation-range:cover}
-.ls.sv .lcb{animation:lcs linear both;animation-timeline:view(inline);animation-range:cover}
-@keyframes lcz{0%{z-index:1}50%{z-index:100}100%{z-index:1}}
-@keyframes lcs{0%{transform:translate(calc(var(--tx,0px)*-1),var(--ty,0px)) rotate(var(--rt,0deg)) scale(var(--sc,1))}50%{transform:translate(0,0) rotate(0deg) scale(1)}100%{transform:translate(var(--tx,0px),var(--ty,0px)) rotate(calc(var(--rt,0deg)*-1)) scale(var(--sc,1))}}
-.lcb{transform-origin:50% 100%;will-change:transform;box-shadow:0 3px 8px rgba(0,0,0,.14);display:block;border:1px solid var(--line);border-top:3px solid var(--rc);background:var(--paper);padding:8px 10px 10px;height:100%}
-button.lc:hover .lcb{background:var(--tint)}
-.lce{position:absolute;left:8px;top:2px;font-size:.66rem;font-weight:900;color:var(--rc);letter-spacing:.02em}
-.lcy{position:absolute;left:0;right:0;top:0;display:flex;flex-direction:column;align-items:center;font-weight:900;font-size:1.3rem;font-variant-numeric:tabular-nums;line-height:1.15;pointer-events:none}
-.lcy small{font-size:.68rem;font-weight:700;color:var(--ink2);line-height:1.3}
-.lch{display:block;font-weight:900;margin-top:3px}
 .rt{display:inline-block;margin-right:6px;font-size:.66rem;font-weight:900;color:var(--rc);border:1px solid var(--rc);border-radius:3px;padding:0 5px;vertical-align:.12em;white-space:nowrap}
-.lcp{display:block;font-size:.9rem;color:var(--ink);margin-top:4px;line-height:1.6;word-break:keep-all}
-button.lc.sel .lcb{background:color-mix(in srgb,var(--rc) 13%,var(--paper));box-shadow:0 0 0 3px var(--rc),0 6px 14px rgba(0,0,0,.18)}
-button.lc.sel::after{width:19px;height:19px;margin-left:-9.5px;top:35px;box-shadow:0 0 0 4px color-mix(in srgb,var(--rc) 30%,transparent)}
-button.lc.sel::before{opacity:1}
-.lcb{transition:box-shadow .2s,background .2s}
-.lcb{position:relative}.lcb::after{content:'';position:absolute;inset:0;background:#3a2a10;opacity:0;pointer-events:none}
-.ls.sv .lcb::after{animation:lcd linear both;animation-timeline:view(inline);animation-range:cover}
-@keyframes lcd{0%,100%{opacity:.2}50%{opacity:0}}
 button.od.sel{transform:scale(1.55);box-shadow:0 0 0 3px var(--ink);z-index:1}
 
 .empty{border:2px dashed var(--line);padding:26px 18px;text-align:center;display:grid;gap:12px;justify-items:center}
@@ -859,7 +848,7 @@ function renderRecords(data){
   function chip(name,n){
     var b=el('button','chip',name);b.type='button';
     b.setAttribute('aria-pressed',S.region===name?'true':'false');
-    b.addEventListener('click',function(){S.region=name;show()});
+    b.addEventListener('click',function(){S.region=name;S.esLeft=0;show()});
     chips.appendChild(b);
   }
   chip('전체',data.events.length);
@@ -875,10 +864,8 @@ function renderRecords(data){
   }
   function center(k,smooth){
     var c=cards[k];if(!c)return;
-    var st=c.parentNode;
-    var cr=c.getBoundingClientRect(),sr=st.getBoundingClientRect();
-    var left=st.scrollLeft+(cr.left-sr.left)-(st.clientWidth-cr.width)/2;
-    st.scrollTo({left:Math.max(0,left),behavior:smooth?'smooth':'auto'});
+    var col=c.parentNode,st=col.parentNode;
+    st.scrollTo({left:Math.max(0,col.offsetLeft-st.offsetLeft-2),behavior:smooth?'smooth':'auto'});
   }
 
   /* 한눈에 보기: 레이더 — 가운데가 오늘, 멀수록 오래된 사건, 점 색이 지역. 스윕이 지나가면 사건이 탐지되어 깜박임. 지역을 고르면 연도순 일렬 */
@@ -1157,7 +1144,7 @@ function renderRecords(data){
       hh.classList.add('go');hh.tabIndex=0;hh.setAttribute('role','button');
       hh.title='누르면 전체 타임라인의 해당 카드로 이동합니다';
       var goTl=function(){var c=cards[keyOf2(selE)];if(!c)return;S.sel=keyOf2(selE);mark();
-        var ln=c.closest('.lane');if(ln&&ln.scrollIntoView)ln.scrollIntoView({behavior:'smooth',block:'center'});center(S.sel,true)};
+        center(S.sel,true);c.scrollIntoView({behavior:'smooth',block:'center'})};
       hh.addEventListener('click',goTl);
       hh.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();goTl()}});
     }
@@ -1201,62 +1188,26 @@ function renderRecords(data){
   var lh=el('div','lh');
   lh.appendChild(el('b',null,name==='전체'?'전체 타임라인':name+' 타임라인'));
   lh.appendChild(el('span','n',items.length+'건'));
-  var st=el('div','ls');st.tabIndex=0;st.setAttribute('aria-label',name+' 타임라인');
+  var st=el('div','es');st.tabIndex=0;st.setAttribute('aria-label',name+' 타임라인: 시대별로 옆으로 넘겨 보세요');
   lane.appendChild(lh);
-  var lastEra=-9;
+  var cols={};
   items.forEach(function(e){
-    var c=el('button','lc');c.type='button';c.style.setProperty('--rc','var('+RC[e.r]+')');
-    var k=eraOf(e.y);
-    if(k!==lastEra){c.appendChild(el('span','lce',EL[k]));lastEra=k}
-    var y=el('span','lcy');
-    y.appendChild(document.createTextNode(yrTxt(e.y)));
-    y.appendChild(el('small',null,(agoText(e.y)?agoText(e.y)+' · ':'')+(e.dt||(S.m+'.'+S.d))));
-    c.appendChild(y);
-    var box=el('span','lcb');
-    var hd=el('span','lch');
-    if(name==='전체')hd.appendChild(el('span','rt',e.r+(e.t==='기념일'?' · 기념일':'')));
-    else if(e.t==='기념일')hd.appendChild(el('span','rt','기념일'));
-    hd.appendChild(document.createTextNode(e.head));
-    box.appendChild(hd);
-    if(e.body)box.appendChild(el('span','lcp',e.body));
-    c.appendChild(box);
-    c.addEventListener('click',function(){S.sel=(S.sel===keyOf2(e)?'':keyOf2(e));mark();if(S.sel)center(S.sel,true)});
-    cards[keyOf2(e)]=c;
-    st.appendChild(c);
+    var k=eraOf(e.y),col=cols[k];
+    if(!col){col=el('div','ec');var hd=el('div','ech');hd.appendChild(el('b',null,EL[k]));col._i=el('i',null,'');hd.appendChild(col._i);col.appendChild(hd);col._n=0;cols[k]=col;st.appendChild(col)}
+    col._n++;col._i.textContent=col._n+'건';
+    var c=el('button','er');c.type='button';c.style.setProperty('--rc','var('+RC[e.r]+')');
+    c.appendChild(el('span','ery',e.y<0?'BC '+(-e.y):String(e.y)));
+    c.appendChild(el('span','erh',e.head));
+    c.appendChild(el('span','err',e.r));
+    c.addEventListener('click',function(){
+      S.esLeft=st.scrollLeft;S.sel=keyOf2(e);S.center=false;S.toRadar=true;show();
+    });
+    cards[keyOf2(e)]=c;col.appendChild(c);
   });
-  /* 카드 쌓임 효과: 지원 브라우저는 CSS 스크롤 연동 애니메이션(합성기 처리, 떨림 없음), 아니면 JS 보간 */
-  var SV=window.CSS&&CSS.supports&&CSS.supports('animation-timeline:view()');
-  var rafT=0,geo=[];
-  function measure(){
-    var first=st.querySelector('.lc');if(!first)return;
-    var cw=st.clientWidth,rem=parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
-    var W0=Math.min(19*rem,cw*.86);st.style.setProperty('--w',W0+'px');
-    var pd=Math.max(0,(cw-W0)/2);
-    st.style.paddingLeft=st.style.paddingRight=pd+'px';
-    var W=first.offsetWidth,h=(st.clientWidth+W)/2,r=Math.min(h/W,2);
-    st.style.setProperty('--tx',(h*.9).toFixed(1)+'px');
-    st.style.setProperty('--ty',(r*10).toFixed(1)+'px');
-    st.style.setProperty('--rt',(r*1.6).toFixed(2)+'deg');
-    st.style.setProperty('--sc',(1-r*.04).toFixed(3));
-    geo=[];st.querySelectorAll('.lc').forEach(function(c){geo.push({c:c,b:c.querySelector('.lcb'),x:c.offsetLeft+W/2,W:W})});
-  }
-  function fan(){
-    rafT=0;if(!geo.length)measure();
-    var mid=st.scrollLeft+st.clientWidth/2;
-    for(var i=0;i<geo.length;i++){var g=geo[i],d=(g.x-mid)/g.W,ad=Math.abs(d);
-      if(ad>3.4){if(g.on){g.b.style.transform='none';g.c.style.zIndex='';g.on=0}continue}
-      var sg=d<0?-1:1,tx=-d*g.W*.9,ty=Math.min(ad,2)*10,rot=sg*Math.min(ad,2)*1.6,sc=1-Math.min(ad,2)*.04;
-      g.b.style.transform='translate3d('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px,0) rotate('+rot.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
-      g.c.style.zIndex=String(1000-Math.round(ad*100));g.on=1}
-  }
-  if(SV){st.classList.add('sv');}
-  else st.addEventListener('scroll',function(){if(!rafT)rafT=requestAnimationFrame(fan)},{passive:true});
-  var rsT=0;
-  function relayout(){clearTimeout(rsT);rsT=setTimeout(function(){measure();if(!SV)fan()},60)}
-  window.addEventListener('resize',relayout);
+  st.addEventListener('scroll',function(){S.esLeft=st.scrollLeft},{passive:true});
   lane.appendChild(st);lanes.appendChild(lane);
   list.appendChild(lanes);
-  measure();if(!SV)fan();setTimeout(function(){measure();if(!SV)fan()},0);
+  if(typeof S.esLeft==='number')st.scrollLeft=S.esLeft;
   if(!cards[S.sel])S.sel='';
   mark();
   if(S.center&&S.sel){
@@ -1266,6 +1217,7 @@ function renderRecords(data){
     if(ln&&ln.scrollIntoView)ln.scrollIntoView({behavior:'smooth',block:'center'});
   }
   $('count').textContent=items.length+'건';
+  if(S.toRadar){S.toRadar=false;var ovn=list.querySelector('.ov');if(ovn&&ovn.scrollIntoView)ovn.scrollIntoView({behavior:'smooth',block:'start'})}
 }
 
 document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
@@ -1311,7 +1263,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v76 · 10.22 18:30 업데이트';
+var BUILD='v77 · 10.22 18:50 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
