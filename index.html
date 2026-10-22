@@ -953,7 +953,7 @@ function renderRecords(data){
   }else{
     var sun=sv('g',{class:'osun'});
     sun.appendChild(sv('circle',{cx:CX,cy:CY,r:RIN-6}));
-    [[String(TY)+'.',CY-7,'o2'],[TM+'.',CY+2,'o1'],[String(TD)+'.',CY+11,'o1']].forEach(function(r){
+    [[String(TY)+'.',CY-3,'o2'],[TM+'.'+TD+'.',CY+8,'o1']].forEach(function(r){
       sun.appendChild(sv('text',{x:CX,y:r[1],'text-anchor':'middle',class:r[2]},r[0]));
     });
     svg.appendChild(sun);
