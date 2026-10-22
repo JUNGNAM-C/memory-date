@@ -945,8 +945,20 @@ function renderRecords(data){
     svg.appendChild(sun);
   }
   /* 돌려 보기: 드래그 + 관성 */
-  var drag=null,raf=0,raf2=0;
+  var drag=null,raf=0,raf2=0,snapRaf=0,SNAP=30;
   function setRot(a){S.rot=a;gal.setAttribute('transform','rotate('+a.toFixed(2)+' '+CX+' '+CY+')')}
+  function snapTo(t){
+    if(reduce){setRot(t);return}
+    S.rotTarget=t;
+    if(snapRaf)return;
+    (function stp(){
+      snapRaf=0;
+      if(!svg.isConnected)return;
+      var cur=S.rot||0,df=S.rotTarget-cur;
+      if(Math.abs(df)<.08){setRot(S.rotTarget);return}
+      setRot(cur+df*.3);snapRaf=requestAnimationFrame(stp);
+    })();
+  }
   function ptAng(ev){var r=svg.getBoundingClientRect(),sc=r.width/VS;return Math.atan2(ev.clientY-(r.top+(CY-VB)*sc),ev.clientX-(r.left+(CX-VB)*sc))*180/Math.PI}
   function mv(ev){
     if(!drag)return;
@@ -954,16 +966,12 @@ function renderRecords(data){
     if(!moved&&Math.hypot(ev.clientX-drag.x,ev.clientY-drag.y)<6)return;
     moved=true;drag.a=a;drag.rot+=d;
     var dt=Math.max(ev.timeStamp-drag.t,8);drag.t=ev.timeStamp;drag.v=.6*drag.v+.4*(d/dt*16);
-    setRot(drag.rot);
+    snapTo(Math.round(drag.rot/SNAP)*SNAP);
   }
   function up(){
     window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
-    var d=drag;drag=null;if(!d||!moved||reduce)return;
-    var v=d.v;
-    (function step(){
-      if(!svg.isConnected||Math.abs(v)<.04)return;
-      setRot((S.rot||0)+v);v*=.95;raf=requestAnimationFrame(step);
-    })();
+    var d=drag;drag=null;if(!d||!moved)return;
+    snapTo(Math.round((d.rot+d.v*6)/SNAP)*SNAP);
   }
   svg.addEventListener('pointerdown',function(ev){
     if(ev.button>0)return;
