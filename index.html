@@ -345,7 +345,7 @@ button.od:hover{transform:scale(1.3)}
 .lh button:hover{background:var(--tint)}
 .ls{touch-action:pan-x;overflow-y:hidden;overscroll-behavior:contain;contain:layout paint;display:flex;overflow-x:auto;padding:0 0 10px;margin:0 -2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;overscroll-behavior-x:contain}
 .ls::before,.ls::after{content:"";flex:0 0 calc(50% - min(19rem,86%)/2)}
-button.lc{position:relative;flex:none;scroll-snap-align:center;width:min(19rem,86%);text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:58px 6px 46px 6px;display:block}
+button.lc{position:relative;flex:none;scroll-snap-align:center;width:var(--w,min(19rem,86%));text-align:left;background:transparent;color:var(--ink);border:0;border-radius:0;font:inherit;min-height:0;padding:58px 6px 46px 6px;display:block}
 button.lc::before{content:"";position:absolute;left:0;right:0;top:43px;height:3px;background:var(--rc);opacity:.45}
 button.lc::after{content:"";position:absolute;left:50%;top:37px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:var(--rc);border:3px solid var(--bg)}
 .hp-head.go{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px}
@@ -366,7 +366,10 @@ button.lc:hover .lcb{background:var(--tint)}
 button.lc.sel .lcb{background:color-mix(in srgb,var(--rc) 13%,var(--paper));box-shadow:0 0 0 3px var(--rc),0 6px 14px rgba(0,0,0,.18)}
 button.lc.sel::after{width:19px;height:19px;margin-left:-9.5px;top:35px;box-shadow:0 0 0 4px color-mix(in srgb,var(--rc) 30%,transparent)}
 button.lc.sel::before{opacity:1}
-.lcb{transition:transform .2s,box-shadow .2s,background .2s}
+.lcb{transition:box-shadow .2s,background .2s}
+.lcb{position:relative}.lcb::after{content:'';position:absolute;inset:0;background:#3a2a10;opacity:0;pointer-events:none}
+.ls.sv .lcb::after{animation:lcd linear both;animation-timeline:view(inline);animation-range:cover}
+@keyframes lcd{0%,100%{opacity:.2}50%{opacity:0}}
 button.od.sel{transform:scale(1.55);box-shadow:0 0 0 3px var(--ink);z-index:1}
 
 .empty{border:2px dashed var(--line);padding:26px 18px;text-align:center;display:grid;gap:12px;justify-items:center}
@@ -1108,11 +1111,15 @@ function renderRecords(data){
   var rafT=0,geo=[];
   function measure(){
     var first=st.querySelector('.lc');if(!first)return;
-    var W=first.offsetWidth,h=(st.clientWidth+W)/2,r=h/W;
-    st.style.setProperty('--tx',(h*.86).toFixed(1)+'px');
-    st.style.setProperty('--ty',(Math.min(r,3)*7).toFixed(1)+'px');
-    st.style.setProperty('--rt',(Math.min(r,3)*3.2).toFixed(2)+'deg');
-    st.style.setProperty('--sc',(1-Math.min(r,3)*.03).toFixed(3));
+    var cw=st.clientWidth,rem=parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+    var W0=Math.min(19*rem,cw*.86);st.style.setProperty('--w',W0+'px');
+    var pd=Math.max(0,(cw-W0)/2);
+    st.style.paddingLeft=st.style.paddingRight=pd+'px';
+    var W=first.offsetWidth,h=(st.clientWidth+W)/2,r=Math.min(h/W,2);
+    st.style.setProperty('--tx',(h*.9).toFixed(1)+'px');
+    st.style.setProperty('--ty',(r*10).toFixed(1)+'px');
+    st.style.setProperty('--rt',(r*1.6).toFixed(2)+'deg');
+    st.style.setProperty('--sc',(1-r*.04).toFixed(3));
     geo=[];st.querySelectorAll('.lc').forEach(function(c){geo.push({c:c,b:c.querySelector('.lcb'),x:c.offsetLeft+W/2,W:W})});
   }
   function fan(){
@@ -1120,7 +1127,7 @@ function renderRecords(data){
     var mid=st.scrollLeft+st.clientWidth/2;
     for(var i=0;i<geo.length;i++){var g=geo[i],d=(g.x-mid)/g.W,ad=Math.abs(d);
       if(ad>3.4){if(g.on){g.b.style.transform='none';g.c.style.zIndex='';g.on=0}continue}
-      var sg=d<0?-1:1,tx=-d*g.W*.86,ty=Math.min(ad,3)*7,rot=sg*Math.min(ad,3)*3.2,sc=1-Math.min(ad,3)*.03;
+      var sg=d<0?-1:1,tx=-d*g.W*.9,ty=Math.min(ad,2)*10,rot=sg*Math.min(ad,2)*1.6,sc=1-Math.min(ad,2)*.04;
       g.b.style.transform='translate3d('+tx.toFixed(1)+'px,'+ty.toFixed(1)+'px,0) rotate('+rot.toFixed(2)+'deg) scale('+sc.toFixed(3)+')';
       g.c.style.zIndex=String(1000-Math.round(ad*100));g.on=1}
   }
@@ -1186,7 +1193,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v64 · 10.22 15:10 업데이트';
+var BUILD='v65 · 10.22 15:30 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
