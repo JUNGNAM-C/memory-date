@@ -58,7 +58,7 @@ s=s[:a]+"""function show(){
 a=s.index("$('prevM').addEventListener"); b=s.index("})();",a)
 s=s[:a]+"loadMonth();\n"+s[b:]
 # 7) 푸터 문구
-a=s.index("  f.textContent=(SEED[keyOf(S.m,S.d)]"); b=s.index("+base;",a)
+a=s.index("  f.textContent=(SEED[keyOf(S.m,S.d)]"); b=s.index("+base+' ('+BUILD",a)
 s=s[:a]+"  f.textContent='이 날의 기억은 널리 알려진 역사 지식과 공개된 자료를 바탕으로 정리했습니다. 자료마다 날짜가 다른 항목은 본문에 적어 두었습니다. '"+s[b:]
 rep("S.loading?'기억을 정리하는 중입니다':'이 날의 기억을 기다리고 있습니다'","S.loading?'기억을 불러오는 중입니다':'이 날의 기억은 아직 준비되지 않았습니다'")
 rep("'기억이 준비되면 가장 이야기할 만한 장면이 이곳에 실립니다.'","'기억은 매달 초에 한 달 분량을 새로 올립니다.'")
