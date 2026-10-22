@@ -867,12 +867,12 @@ function renderRecords(data){
   var fpseudo=null;
   if(f&&!fe){fpseudo={y:f.y,r:f.r,head:f.head,body:String(f.body||'').split('\n\n')[0],_f:1};list2.push(fpseudo);list2.sort(function(x,y){return x.y-y.y})}
   var pos={},ang={};
-  /* 각도는 기존 분산 배치를 유지하되, 같은 지역 안에서는 오래된 사건일수록 먼저(시계방향) 오도록 슬롯을 재배정 */
+  /* 각도는 기존 분산 배치를 유지하되, 같은 지역 안에서는 최근 사건일수록 먼저(시계방향) 오도록 슬롯을 재배정 */
   var slots=list2.map(function(e,i){return ((i*GA)%360+360)%360}),byR={};
   list2.forEach(function(e,i){(byR[e.r]=byR[e.r]||[]).push(i)});
   Object.keys(byR).forEach(function(r){
     var ix=byR[r],sl=ix.map(function(i){return slots[i]}).sort(function(x,y){return x-y});
-    ix.forEach(function(i,j){slots[i]=sl[j]});
+    ix.slice().reverse().forEach(function(i,j){slots[i]=sl[j]});
   });
   list2.forEach(function(e,i){var A=-90+slots[i],k=keyOf2(e);ang[k]=A;pos[k]=pol(rad(agoY(e.y)),A)});
   var rot=(typeof S.rot==='number')?S.rot:0;
@@ -905,8 +905,24 @@ function renderRecords(data){
   }
   var selE=null;list2.forEach(function(e){if(keyOf2(e)===S.sel)selE=e});
   var moved=false,lay={},changed=(S.lastRegion!==undefined&&S.lastRegion!==S.region),lastLay=S.lastLay||{};
-  var blips=[],blipBy={};
-  list2.forEach(function(e,idx){
+  var blips=[],blipBy={},lblPos={};
+  if(regSel){
+    var CAND=[[0,-8,'middle'],[0,15,'middle'],[8,3,'start'],[-8,3,'end'],[7,-7,'start'],[-7,-7,'end'],[7,13,'start'],[-7,13,'end']],placed=[],dotsXY=[];
+    list2.forEach(function(e){var q=rotPt(pos[keyOf2(e)],rot);dotsXY.push([q[0],q[1],e.r===S.region])});
+    var ovl=function(a,b){var w=Math.min(a[2],b[2])-Math.max(a[0],b[0]),h=Math.min(a[3],b[3])-Math.max(a[1],b[1]);return w>0&&h>0?w*h:0};
+    list2.filter(function(e){return e.r===S.region}).sort(function(a,b){return b.y-a.y}).forEach(function(e){
+      var k=keyOf2(e),q=rotPt(pos[k],rot),w=ylab(e.y).length*4.9+1,best=null;
+      CAND.forEach(function(c,ci){
+        var x=q[0]+c[0],y=q[1]+c[1],x0=c[2]==='middle'?x-w/2:(c[2]==='start'?x:x-w),R=[x0,y-8,x0+w,y+2],sc=ci*.8;
+        placed.forEach(function(P){sc+=ovl(R,P)*3});
+        dotsXY.forEach(function(d){sc+=ovl(R,[d[0]-4,d[1]-4,d[0]+4,d[1]+4])*(d[2]?2:1)});
+        if(R[0]<2||R[2]>398||R[1]<2||R[3]>398)sc+=200;
+        if(!best||sc<best.sc)best={sc:sc,c:c,R:R};
+      });
+      placed.push(best.R);lblPos[k]=best.c;
+    });
+  }
+    list2.forEach(function(e,idx){
     var k=keyOf2(e),r=e.r,isF=(e===fe||e===fpseudo),inRow=rowMode&&rowPos[k]!=null;
     var to=inRow?rowPos[k]:pos[k];
     lay[k]={row:inRow,p:to};
@@ -935,7 +951,8 @@ function renderRecords(data){
     g.appendChild(shape);
     if(regSel&&r!==S.region)g.classList.add('dim');
     if(regSel&&r===S.region){
-      var yt=sv('text',{x:0,y:-9,'text-anchor':'middle',class:'dyr',transform:'rotate('+(-rot).toFixed(2)+')'},ylab(e.y));
+      var lp=lblPos[k]||[0,-9,'middle'];
+      var yt=sv('text',{x:lp[0],y:lp[1],'text-anchor':lp[2],class:'dyr',transform:'rotate('+(-rot).toFixed(2)+')'},ylab(e.y));
       yt.style.fill='var('+RC[r]+')';g.appendChild(yt);
     }
     function pick(){
@@ -1017,7 +1034,7 @@ function renderRecords(data){
   if(reduce){var rp0=sel2pt();if(rp0){sweepG.style.display='';sweepG.setAttribute('transform','rotate('+head(rp0).toFixed(1)+' '+CX+' '+CY+')');sweepG.classList.add('lock')}}
   else if(svg.animate){
     if(changed&&regSel){
-      var oldK=null;list2.forEach(function(e){if(!oldK&&e.r===S.region)oldK=keyOf2(e)});
+      var oldK=null;list2.forEach(function(e){if(e.r===S.region)oldK=keyOf2(e)});
       if(oldK&&blipBy[oldK]){var ob=blipBy[oldK];S.sweepH=(head(ob.row||rotPt(ob.p,S.rot||0))-5+360)%360}
     }
     var tprev=performance.now(),PER=60000,hS=(typeof S.sweepH==='number')?S.sweepH:0,locked=false;
@@ -1087,7 +1104,7 @@ function renderRecords(data){
   }
   cap.appendChild(top);cap.appendChild(hh);cap.appendChild(hb);
   if(selE){
-    var sib=list2.filter(function(e){return e.r===selE.r}).sort(function(a,b){return a.y-b.y}),si=0;
+    var sib=list2.filter(function(e){return e.r===selE.r}).sort(function(a,b){return b.y-a.y}),si=0;
     sib.forEach(function(e,i){if(keyOf2(e)===S.sel)si=i});
     if(sib.length>1){
       var nx=sib[(si+1)%sib.length];
@@ -1221,7 +1238,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v73 · 10.22 17:40 업데이트';
+var BUILD='v74 · 10.22 18:00 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
