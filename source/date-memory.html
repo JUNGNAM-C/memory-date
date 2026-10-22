@@ -1039,7 +1039,7 @@ function renderRecords(data){
   function up(){
     window.removeEventListener('pointermove',mv);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);
     var d=drag;drag=null;if(!d||!moved)return;
-    snapTo(Math.round((d.rot+d.v*6)/SNAP)*SNAP);
+    snapTo(Math.round(d.rot/SNAP)*SNAP);
   }
   svg.addEventListener('pointerdown',function(ev){
     if(ev.button>0)return;
