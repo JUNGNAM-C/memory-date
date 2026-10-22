@@ -290,6 +290,7 @@ button.od:hover{transform:scale(1.3)}
 .orbit .cross{stroke:rgba(255,194,51,.22);stroke-width:.7}
 .orbit .cross1{stroke:rgba(255,194,51,.45)}
 .orbit .ring{fill:none;stroke:rgba(255,194,51,.32);stroke-width:.8}
+.orbit .dyr{font-size:8px;font-weight:900;paint-order:stroke;stroke:#0f1740;stroke-width:3px;stroke-linejoin:round;pointer-events:none;filter:brightness(1.6)}
 .orbit .ringl{font-size:7px;font-weight:700;fill:rgba(255,240,200,.75);paint-order:stroke;stroke:#0f1740;stroke-width:3px;pointer-events:none}
 .orbit .sweep path{fill:#FFC233}
 .orbit .sweepline{stroke:#FFE9A8;stroke-width:1.4;opacity:.9}
@@ -928,6 +929,10 @@ function renderRecords(data){
     if(!isF)shape.style.fill='var('+RC[r]+')';
     g.appendChild(shape);
     if(regSel&&r!==S.region)g.classList.add('dim');
+    if(regSel&&r===S.region){
+      var yt=sv('text',{x:0,y:-9,'text-anchor':'middle',class:'dyr',transform:'rotate('+(-rot).toFixed(2)+')'},ylab(e.y));
+      yt.style.fill='var('+RC[r]+')';g.appendChild(yt);
+    }
     function pick(){
       if(moved){return}
       S.sel=(S.sel===k)?'':k;S.center=false;show();
@@ -1193,7 +1198,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v65 · 10.22 15:30 업데이트';
+var BUILD='v66 · 10.22 15:45 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
