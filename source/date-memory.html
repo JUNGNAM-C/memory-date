@@ -537,7 +537,7 @@ function normalize(raw){
   var f=raw.featured&&raw.featured.head?raw.featured:null;
   var feat=f?{y:Math.trunc(Number(f.y))||ev[0].y,r:REGIONS.indexOf(f.r)>=0?f.r:'기타',head:String(f.head).slice(0,70),body:String(f.body||'').replace(/\n{3,}/g,'\n\n').slice(0,1000),sig:String(f.sig||'').slice(0,400),refs:(Array.isArray(f.refs)?f.refs:[]).filter(function(x){return x&&typeof x.u==='string'&&/^https:\/\//.test(x.u)}).slice(0,3).map(function(x){return {t:String(x.t||x.u).slice(0,80),u:x.u}})}
             :{y:ev[0].y,r:ev[0].r,head:ev[0].head,body:ev[0].body,sig:'',refs:[]};
-  return {events:ev.slice(0,48),notes:notes,featured:feat};
+  return {events:ev.slice(0,80),notes:notes,featured:feat};
 }
 Object.keys(SEED).forEach(function(k){SEED[k]=normalize(SEED[k])});
 
