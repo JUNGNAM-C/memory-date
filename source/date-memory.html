@@ -935,7 +935,14 @@ function renderRecords(data){
   var fpseudo=null;
   if(f&&!fe){fpseudo={y:f.y,r:f.r,head:f.head,body:String(f.body||'').split('\n\n')[0],_f:1};list2.push(fpseudo);list2.sort(function(x,y){return x.y-y.y})}
   var pos={},ang={};
-  list2.forEach(function(e,i){var A=-90+i*GA,k=keyOf2(e);ang[k]=A;pos[k]=pol(rad(agoY(e.y)),A)});
+  /* 각도는 기존 분산 배치를 유지하되, 같은 지역 안에서는 오래된 사건일수록 먼저(시계방향) 오도록 슬롯을 재배정 */
+  var slots=list2.map(function(e,i){return ((i*GA)%360+360)%360}),byR={};
+  list2.forEach(function(e,i){(byR[e.r]=byR[e.r]||[]).push(i)});
+  Object.keys(byR).forEach(function(r){
+    var ix=byR[r],sl=ix.map(function(i){return slots[i]}).sort(function(x,y){return x-y});
+    ix.forEach(function(i,j){slots[i]=sl[j]});
+  });
+  list2.forEach(function(e,i){var A=-90+slots[i],k=keyOf2(e);ang[k]=A;pos[k]=pol(rad(agoY(e.y)),A)});
   var rot=(typeof S.rot==='number')?S.rot:0;
   var regSel=S.region!=='전체',rowMode=false,rowPos={},rowList=[];
   if(rowMode){
@@ -1077,6 +1084,10 @@ function renderRecords(data){
   function sel2pt(){var bo=S.sel&&blipBy[S.sel];return bo?(bo.row||rotPt(bo.p,S.rot||0)):null}
   if(reduce){var rp0=sel2pt();if(rp0){sweepG.style.display='';sweepG.setAttribute('transform','rotate('+head(rp0).toFixed(1)+' '+CX+' '+CY+')');sweepG.classList.add('lock')}}
   else if(svg.animate){
+    if(changed&&regSel){
+      var oldK=null;list2.forEach(function(e){if(!oldK&&e.r===S.region)oldK=keyOf2(e)});
+      if(oldK&&blipBy[oldK]){var ob=blipBy[oldK];S.sweepH=(head(ob.row||rotPt(ob.p,S.rot||0))-5+360)%360}
+    }
     var tprev=performance.now(),PER=60000,hS=(typeof S.sweepH==='number')?S.sweepH:0,locked=false;
     function frame(now){
       if(!svg.isConnected)return;
@@ -1118,7 +1129,7 @@ function renderRecords(data){
   var cap=el('div','ocap');
   var top=el('div','hp-top'),hh=el('div','hp-head'),hb=el('div','hp-body');
   if(selE){
-    top.textContent='TARGET LOCKED · '+(agoText(selE.y)?agoText(selE.y)+' · ':'')+yrTxt(selE.y)+'년 · '+selE.r;
+    top.appendChild(el('div',null,'TARGET LOCKED'));top.appendChild(el('div','hp-top2',(agoText(selE.y)?agoText(selE.y)+' · ':'')+yrTxt(selE.y)+'년 · '+selE.r));
     hh.textContent=selE.head;
     if(cards[keyOf2(selE)]||true){
       hh.classList.add('go');hh.tabIndex=0;hh.setAttribute('role','button');
@@ -1144,7 +1155,7 @@ function renderRecords(data){
   }
   cap.appendChild(top);cap.appendChild(hh);cap.appendChild(hb);
   if(selE){
-    var sib=list2.filter(function(e){return e.r===selE.r}).sort(function(a,b){return b.y-a.y}),si=0;
+    var sib=list2.filter(function(e){return e.r===selE.r}).sort(function(a,b){return a.y-b.y}),si=0;
     sib.forEach(function(e,i){if(keyOf2(e)===S.sel)si=i});
     if(sib.length>1){
       var nx=sib[(si+1)%sib.length];
@@ -1278,7 +1289,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v72 · 10.22 17:20 업데이트';
+var BUILD='v73 · 10.22 17:40 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
