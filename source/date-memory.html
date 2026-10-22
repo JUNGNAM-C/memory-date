@@ -974,11 +974,11 @@ function renderRecords(data){
   var selE=null;list2.forEach(function(e){if(keyOf2(e)===S.sel)selE=e});
   var moved=false,lay={},changed=(S.lastRegion!==undefined&&S.lastRegion!==S.region),lastLay=S.lastLay||{};
   var blips=[],blipBy={},lblPos={};
-  if(regSel){
+  if(actR){
     var CAND=[[0,-8,'middle'],[0,15,'middle'],[8,3,'start'],[-8,3,'end'],[7,-7,'start'],[-7,-7,'end'],[7,13,'start'],[-7,13,'end']],placed=[],dotsXY=[];
-    list2.forEach(function(e){var q=rotPt(pos[keyOf2(e)],rot);dotsXY.push([q[0],q[1],e.r===S.region])});
+    list2.forEach(function(e){var q=rotPt(pos[keyOf2(e)],rot);dotsXY.push([q[0],q[1],e.r===actR])});
     var ovl=function(a,b){var w=Math.min(a[2],b[2])-Math.max(a[0],b[0]),h=Math.min(a[3],b[3])-Math.max(a[1],b[1]);return w>0&&h>0?w*h:0};
-    list2.filter(function(e){return e.r===S.region}).sort(function(a,b){return b.y-a.y}).forEach(function(e){
+    list2.filter(function(e){return e.r===actR}).sort(function(a,b){return b.y-a.y}).forEach(function(e){
       var k=keyOf2(e),q=rotPt(pos[k],rot),w=ylab(e.y).length*4.9+1,best=null;
       CAND.forEach(function(c,ci){
         var x=q[0]+c[0],y=q[1]+c[1],x0=c[2]==='middle'?x-w/2:(c[2]==='start'?x:x-w),R=[x0,y-8,x0+w,y+2],sc=ci*.8;
@@ -1018,7 +1018,7 @@ function renderRecords(data){
     if(!isF)shape.style.fill=(actR&&r===actR)?'var('+RC[r]+')':'#fff';
     g.appendChild(shape);
     if(regSel&&r!==S.region)g.classList.add('dim');
-    if(regSel&&r===S.region){
+    if(actR&&r===actR){
       var lp=lblPos[k]||[0,-9,'middle'];
       var yt=sv('text',{x:lp[0],y:lp[1],'text-anchor':lp[2],class:'dyr',transform:'rotate('+(-rot).toFixed(2)+')'},ylab(e.y));
       yt.style.fill='var('+RC[r]+')';g.appendChild(yt);
@@ -1306,7 +1306,7 @@ function renderNotes(data){
   sync();
 }
 
-var BUILD='v74 · 10.22 18:00 업데이트';
+var BUILD='v75 · 10.22 18:15 업데이트';
 function renderFoot(data){
   var f=$('foot');if(!f)return;
   var base='공휴일은 법정 기준(대체공휴일 포함)으로 계산했으며 임시공휴일은 반영하지 않았습니다. 칸 안의 작은 숫자는 음력 날짜입니다. 사건의 지역은 일어난 장소를 기준으로 나눴고 아시아에는 한국이 포함되지 않습니다. 날짜가 자료마다 다른 사건은 연도 아래에 따로 적었습니다.';
